@@ -1,5 +1,6 @@
 ﻿using CumulusAndroid.Graphics;
 using CumulusAndroid.Screens;
+using CumulusAndroid.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,6 +35,7 @@ namespace CumulusAndroid
             Graphics.PreferredBackBufferHeight = 600;
             Graphics.SynchronizeWithVerticalRetrace = false;
             Graphics.SupportedOrientations = DisplayOrientation.Portrait;
+            Graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Graphics.ApplyChanges();
 
             SetGameState(GameState.Test);
@@ -41,7 +43,7 @@ namespace CumulusAndroid
 
         public void Update(GameTime time)
         {
-            //Input.Update();
+            Input.Update();
             CurrentScreen?.Update(time);
         }
 
@@ -72,7 +74,7 @@ namespace CumulusAndroid
                     //SetScreen(new SkinScreen());
                     break;
                 case GameState.Test:
-                    SetScreen(new TestScreen());
+                    SetScreen(new MenuScreen());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

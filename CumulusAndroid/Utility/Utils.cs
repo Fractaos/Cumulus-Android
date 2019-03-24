@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace CumulusAndroid.Utility
 {
     public static class Utils
     {
         // Constants
-        //public const float SCALE = 0.5f;
+        public const float SCALE = 0.5f;
 
         public const int WINDOW_WIDTH = 1080, WINDOW_HEIGHT = (WINDOW_WIDTH * 16) / 9;
 
@@ -33,8 +35,64 @@ namespace CumulusAndroid.Utility
 
         public static bool IntroPlayed = false;
 
-        //public static Grid _gameGrid = new Grid();
+        //public static Grid GameGrid = new Grid();
 
         public static Random Random = new Random();
+
+        /// <summary>
+        /// Dessine une texture pleine
+        /// </summary>
+        /// <param name="width">La largeur</param>
+        /// <param name="height">La hauteur</param>
+        /// <param name="color">La couleur</param>
+        /// <returns></returns>
+        public static Texture2D CreateRectangleTexture(int width, int height, Color color)
+        {
+            if (width <= 0)
+            {
+                width = 1;
+            }
+            var texture = new Texture2D(Main.Device, width, height);
+            var colors = new Color[width * height];
+            for (var i = 0; i < colors.Length; i++)
+            {
+                colors[i] = color;
+            }
+            texture.SetData(colors);
+            return texture;
+        }
+
+        /// <summary>
+        /// Dessine une texture creuse, avec seulement les contours
+        /// </summary>
+        /// <param name="width">La largeur</param>
+        /// <param name="height">La hauteur</param>
+        /// <param name="color">La couleur</param>
+        /// <returns></returns>
+        public static Texture2D CreateContouringRectangleTexture(int width, int height, Color color)
+        {
+            var texture = new Texture2D(Main.Device, width, height);
+            var colors = new Color[width * height];
+            for (var i = 0; i < colors.Length; i++)
+            {
+                if ((i >= 0 && i < width) || (i > ((colors.Length - 1) - width) && i <= colors.Length - 1))
+                {
+                    colors[i] = color;
+                }
+                if (i % width == 0)
+                {
+                    colors[i] = color;
+                    if (i > 0)
+                    {
+                        colors[i - 1] = color;
+                    }
+                }
+            }
+
+            texture.SetData(colors);
+
+            return texture;
+        }
+
     }
 }
