@@ -7,13 +7,12 @@ namespace CumulusAndroid.Utility
     public static class Utils
     {
         // Constants
-        public const float SCALE = 0.5f;
 
-        public const int WINDOW_WIDTH = 1080, WINDOW_HEIGHT = (WINDOW_WIDTH * 16) / 9;
+        public const int BASE_BACKGROUND_WIDTH = 1080, BASE_BACKGROUND_HEIGHT = (BASE_BACKGROUND_WIDTH * 16) / 9;
 
-        public const int GAMEBOARD_OFFSET = WINDOW_HEIGHT / 10 + 10;
+        public const int GAMEBOARD_OFFSET = BASE_BACKGROUND_HEIGHT / 10 + 10;
 
-        public const float CELL_SIZE = (float)WINDOW_WIDTH / 10;
+        public const float CELL_SIZE = (float)BASE_BACKGROUND_WIDTH / 10;
 
         public const float BACKGROUND_DEPTH = 0f;
 

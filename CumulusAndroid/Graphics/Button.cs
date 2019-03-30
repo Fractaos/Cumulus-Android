@@ -1,7 +1,6 @@
 ﻿using CumulusAndroid.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace CumulusAndroid.Graphics
@@ -98,10 +97,9 @@ namespace CumulusAndroid.Graphics
 
         public void Update(GameTime gameTime)
         {
-            var mouse = Mouse.GetState();
-            _hovered = _hitbox.Contains(mouse.X, mouse.Y);
+            _hovered = _hitbox.Contains(Input.FirstTouchPosition);
 
-            if (Input.Left(true) && _hovered)
+            if (Input.OneTouched() && _hovered)
             {
                 Click?.Invoke(this, new EventArgs());
             }

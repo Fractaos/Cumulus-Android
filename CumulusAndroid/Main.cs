@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using Screen = CumulusAndroid.Screens.Screen;
 
 namespace CumulusAndroid
 {
@@ -16,6 +17,9 @@ namespace CumulusAndroid
         public static ContentManager Content;
         public static Screen CurrentScreen;
 
+        public static int OriginalScreenWidth, OriginalScreenHeight;
+        public static float Scale;
+
         public static GameState GameState;
 
         public Main(GraphicsDeviceManager graphics, Game game)
@@ -24,6 +28,9 @@ namespace CumulusAndroid
             Device = graphics.GraphicsDevice;
             Instance = game;
             Content = game.Content;
+            OriginalScreenHeight = Graphics.PreferredBackBufferWidth;
+            OriginalScreenWidth = Graphics.PreferredBackBufferHeight;
+            Scale = (float)OriginalScreenHeight / Utils.BASE_BACKGROUND_HEIGHT <= 1 ? (float)OriginalScreenHeight / Utils.BASE_BACKGROUND_HEIGHT : 1;
         }
 
         public void Initialize()
@@ -31,14 +38,14 @@ namespace CumulusAndroid
             Assets.LoadAll();
 
             Graphics.IsFullScreen = true;
-            Graphics.PreferredBackBufferWidth = 800;
-            Graphics.PreferredBackBufferHeight = 600;
-            Graphics.SynchronizeWithVerticalRetrace = false;
             Graphics.SupportedOrientations = DisplayOrientation.Portrait;
+            Graphics.PreferredBackBufferWidth = Utils.BASE_BACKGROUND_WIDTH;
+            Graphics.PreferredBackBufferHeight = Utils.BASE_BACKGROUND_HEIGHT;
+            Graphics.SynchronizeWithVerticalRetrace = false;
             Graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Graphics.ApplyChanges();
 
-            SetGameState(GameState.Test);
+            SetGameState(GameState.Menu);
         }
 
         public void Update(GameTime time)
@@ -68,13 +75,13 @@ namespace CumulusAndroid
                     //SetScreen(new GameScreen());
                     break;
                 case GameState.Menu:
-                    //SetScreen(new MenuScreen());
+                    SetScreen(new MenuScreen());
                     break;
                 case GameState.SkinMenu:
                     //SetScreen(new SkinScreen());
                     break;
                 case GameState.Test:
-                    SetScreen(new MenuScreen());
+                    SetScreen(new TestScreen());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
