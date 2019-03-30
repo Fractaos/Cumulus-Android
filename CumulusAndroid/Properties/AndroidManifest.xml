@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="CumulusAndroid.CumulusAndroid" android:versionName="0.0.1" android:installLocation="auto" android:versionCode="1">
-	<uses-sdk />
-	<application android:label="CumulusAndroid"></application>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.raspberryclafouty.cumulus" android:versionName="0.1" android:installLocation="auto" android:versionCode="1">
+	<uses-sdk android:targetSdkVersion="28" />
+	<application android:label="CumulusAndroid" android:icon="@drawable/Icon"></application>
 </manifest>
