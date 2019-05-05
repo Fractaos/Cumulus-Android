@@ -21,7 +21,7 @@ namespace CumulusAndroid.Graphics
 
         private readonly SpriteFont _font = Assets.Pixel30;
 
-        private readonly float _buttonScale = 1f;
+        private readonly float _buttonScale;
 
         // Processing fields
         private bool _hovered;
@@ -36,58 +36,14 @@ namespace CumulusAndroid.Graphics
 
         #region Constructors
 
-        /// <summary>
-        /// Basic constructor with position & title
-        /// </summary>
-        /// <param name="position">The position of the button</param>
-        /// <param name="title">The text within the button</param>
-        public Button(Vector2 position, string title) : this(position)
+        public Button(Vector2 position, Texture2D background, string title, float scaleRelativeToScreen)
         {
+            var (x, y) = position;
             Title = title;
-            _background = Assets.Button;
-            _hitbox = new Rectangle((int)position.X, (int)position.Y, (int)(_background.Width * _buttonScale), (int)(_background.Height * _buttonScale));
-            _drawedHitbox = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
-        }
-
-        public Button(Vector2 position, string title, float scale) : this(position, title)
-        {
-            _buttonScale = scale;
-            _hitbox = new Rectangle((int)position.X, (int)position.Y, (int)(_background.Width * _buttonScale), (int)(_background.Height * _buttonScale));
-            _drawedHitbox = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
-        }
-
-        public Button(Vector2 position, string title, float scale, SpriteFont font) : this(position, title, scale)
-        {
-            _font = font;
-        }
-
-        public Button(Vector2 position)
-        {
-            _position = position;
-            _background = Assets.ButtonSettings;
-            _hitbox = new Rectangle((int)position.X, (int)position.Y, (int)(_background.Width * _buttonScale), (int)(_background.Height * _buttonScale));
-            _drawedHitbox = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
-        }
-
-        public Button(Vector2 position, Texture2D buttonTexture)
-        {
-            _position = position;
-            _background = buttonTexture;
-            _hitbox = new Rectangle((int)position.X, (int)position.Y, (int)(_background.Width * _buttonScale), (int)(_background.Height * _buttonScale));
-            _drawedHitbox = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
-        }
-
-        public Button(Vector2 position, Texture2D buttonTexture, float scale) : this(position, buttonTexture)
-        {
-            _buttonScale = scale;
-            _hitbox = new Rectangle((int)position.X, (int)position.Y, (int)(_background.Width * _buttonScale), (int)(_background.Height * _buttonScale));
-            _drawedHitbox = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
-        }
-
-        public Button(Vector2 position, float scale) : this(position)
-        {
-            _buttonScale = scale;
-            _hitbox = new Rectangle((int)position.X, (int)position.Y, (int)(_background.Width * _buttonScale), (int)(_background.Height * _buttonScale));
+            _background = background;
+            _buttonScale = (Main.OriginalScreenWidth * scaleRelativeToScreen) / background.Width;
+            _position = new Vector2(x - (background.Width / 2f) * _buttonScale, y - (background.Height / 2f) * _buttonScale);
+            _hitbox = new Rectangle((int)_position.X, (int)_position.Y, (int)(background.Width * _buttonScale), (int)(background.Height * _buttonScale));
             _drawedHitbox = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
         }
 

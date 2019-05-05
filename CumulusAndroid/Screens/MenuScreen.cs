@@ -57,22 +57,22 @@ namespace CumulusAndroid.Screens
                 Assets.MenuBg11
             };
 
-            _playButton = new Button(new Vector2((Main.OriginalScreenWidth / 2) - (Assets.Button.Width / 2),
-                (Main.OriginalScreenHeight / 2f) - (Assets.Button.Height / 2f)),
-                "Play");
+            _playButton = new Button(new Vector2(Main.OriginalScreenWidthMiddle,
+                Main.OriginalScreenHeightMiddle), Assets.Button, "Play", 0.45f);
             _playButton.Click += PlayButtonClick;
 
-            _skinButton = new Button(new Vector2((Main.OriginalScreenWidth / 2) - (Assets.Button.Width / 2),
-                (Main.OriginalScreenHeight / 2) + Assets.Button.Height),
-                "Skins");
+            _skinButton = new Button(new Vector2(Main.OriginalScreenWidthMiddle,
+                Main.OriginalScreenHeightMiddle + Main.GetScreenHeightPositionByPercent(0.15f)),
+                Assets.Button, "Skins", 0.45f);
             _skinButton.Click += SkinButtonClick;
 
-            _quitButton = new Button(new Vector2((Main.OriginalScreenWidth / 2) - (Assets.Button.Width / 2),
-                (Main.OriginalScreenHeight / 2f) + (Assets.Button.Height * 2.5f)),
-                "Quit");
+            _quitButton = new Button(new Vector2(Main.OriginalScreenWidthMiddle,
+                Main.OriginalScreenHeightMiddle + Main.GetScreenHeightPositionByPercent(0.25f)),
+                Assets.Button, "Quit", 0.45f);
             _quitButton.Click += QuitButtonClick;
 
-            _settingsButton = new Button(new Vector2(Main.OriginalScreenWidth - (Assets.ButtonSettings.Width * 2), 10));
+            _settingsButton = new Button(new Vector2(Main.GetScreenWidthPositionByPercent(0.85f),
+                Main.GetScreenHeightPositionByPercent(0.05f)), Assets.ButtonSettings, null, 0.1f);
 
             _tOffset = new TweenValue();
             _tOpacity = new TweenValue();
@@ -95,14 +95,14 @@ namespace CumulusAndroid.Screens
             {
                 if (!_firstTransition)
                 {
-                    EaseBackground(_offset + (9.1f * Utils.BASE_BACKGROUND_HEIGHT), 4000, EaseFunction.EaseInOutCubic);
+                    EaseBackground(_offset + (9.1f * Main.OriginalScreenHeight), 4000, EaseFunction.EaseInOutCubic);
                     _firstTransition = true;
                 }
                 _timePassed += time.ElapsedGameTime.Milliseconds;
                 if (_timePassed >= 4000 && !_secondTransition)
                 {
                     _timePassed = 0;
-                    EaseBackground(_offset - (0.1f * Utils.BASE_BACKGROUND_HEIGHT), 1000, EaseFunction.EaseInOutQuad);
+                    EaseBackground(_offset - (0.1f * Main.OriginalScreenHeight), 1000, EaseFunction.EaseInOutQuad);
                     _secondTransition = true;
                 }
                 if (_timePassed >= 1000 && !_thirdTransition && _secondTransition)
@@ -115,7 +115,7 @@ namespace CumulusAndroid.Screens
             }
             else
             {
-                _offset = 9 * Utils.BASE_BACKGROUND_HEIGHT;
+                _offset = 9 * Main.OriginalScreenHeight;
                 _opacity = 1f;
             }
 
@@ -133,7 +133,7 @@ namespace CumulusAndroid.Screens
             {
                 for (var i = 0; i < _backgrounds.Length; i++)
                 {
-                    _spriteBatch.Draw(_backgrounds[i], new Vector2(0, -(i * Utils.BASE_BACKGROUND_HEIGHT) + _offset), null, Color.White, 0f, Vector2.Zero, Main.Scale, SpriteEffects.None, 0);
+                    _spriteBatch.Draw(_backgrounds[i], new Vector2(0, -(i * Main.OriginalScreenHeight) + _offset), null, Color.White, 0f, Vector2.Zero, Main.Scale, SpriteEffects.None, 0);
                 }
                 _playButton.Draw(_spriteBatch, _opacity);
                 _skinButton.Draw(_spriteBatch, _opacity);

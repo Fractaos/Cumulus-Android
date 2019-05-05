@@ -18,6 +18,7 @@ namespace CumulusAndroid
         public static Screen CurrentScreen;
 
         public static int OriginalScreenWidth, OriginalScreenHeight;
+        public static int OriginalScreenWidthMiddle, OriginalScreenHeightMiddle;
         public static float Scale;
 
         public static GameState GameState;
@@ -29,7 +30,9 @@ namespace CumulusAndroid
             Instance = game;
             Content = game.Content;
             OriginalScreenHeight = Graphics.PreferredBackBufferWidth;
+            OriginalScreenHeightMiddle = OriginalScreenHeight / 2;
             OriginalScreenWidth = Graphics.PreferredBackBufferHeight;
+            OriginalScreenWidthMiddle = OriginalScreenWidth / 2;
             Scale = (float)OriginalScreenHeight / Utils.BASE_BACKGROUND_HEIGHT <= 1 ? (float)OriginalScreenHeight / Utils.BASE_BACKGROUND_HEIGHT : 1;
         }
 
@@ -86,6 +89,16 @@ namespace CumulusAndroid
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public static int GetScreenWidthPositionByPercent(float percent)
+        {
+            return (int)(OriginalScreenWidth * percent);
+        }
+
+        public static int GetScreenHeightPositionByPercent(float percent)
+        {
+            return (int)(OriginalScreenHeight * percent);
         }
     }
 }
