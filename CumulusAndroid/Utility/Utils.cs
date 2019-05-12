@@ -8,11 +8,16 @@ namespace CumulusAndroid.Utility
     {
         // Constants
 
-        public const int BASE_BACKGROUND_WIDTH = 1080, BASE_BACKGROUND_HEIGHT = (BASE_BACKGROUND_WIDTH * 16) / 9;
+        public const int SCREEN_WIDTH = 1080;
+        public const int SCREEN_HEIGHT = (SCREEN_WIDTH * 16) / 9;
 
-        public const int GAMEBOARD_OFFSET = BASE_BACKGROUND_HEIGHT / 10 + 10;
+        public const int CENTER_SCREEN_HORIZONTAL = SCREEN_WIDTH / 2;
 
-        public const float CELL_SIZE = (float)BASE_BACKGROUND_WIDTH / 10;
+        public const int CENTER_SCREEN_VERTICAL = SCREEN_HEIGHT / 2;
+
+        public const int GAMEBOARD_OFFSET = SCREEN_HEIGHT / 10 + 10;
+
+        public const float CELL_SIZE = (float)SCREEN_WIDTH / 10;
 
         public const float BACKGROUND_DEPTH = 0f;
 
@@ -37,6 +42,11 @@ namespace CumulusAndroid.Utility
         //public static Grid GameGrid = new Grid();
 
         public static Random Random = new Random();
+
+        public static Vector2 GetPositionOnScreenByPercent(float percentX, float percentY)
+        {
+            return new Vector2(SCREEN_WIDTH * percentX, SCREEN_HEIGHT * percentY);
+        }
 
         /// <summary>
         /// Dessine une texture pleine

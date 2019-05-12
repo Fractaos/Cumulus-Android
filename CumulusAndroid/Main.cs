@@ -4,7 +4,10 @@ using CumulusAndroid.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ResolutionBuddy;
 using System;
+using Xamarin.Essentials;
+using DisplayOrientation = Microsoft.Xna.Framework.DisplayOrientation;
 using Screen = CumulusAndroid.Screens.Screen;
 
 namespace CumulusAndroid
@@ -16,24 +19,19 @@ namespace CumulusAndroid
         public static Game Instance;
         public static ContentManager Content;
         public static Screen CurrentScreen;
-
-        public static int OriginalScreenWidth, OriginalScreenHeight;
-        public static int OriginalScreenWidthMiddle, OriginalScreenHeightMiddle;
-        public static float Scale;
+        public static SpriteBatch SpriteBatch;
+        public static IResolution Resolution;
 
         public static GameState GameState;
 
         public Main(GraphicsDeviceManager graphics, Game game)
         {
+            VersionTracking.Track();
             Graphics = graphics;
             Device = graphics.GraphicsDevice;
             Instance = game;
             Content = game.Content;
-            OriginalScreenHeight = Graphics.PreferredBackBufferWidth;
-            OriginalScreenHeightMiddle = OriginalScreenHeight / 2;
-            OriginalScreenWidth = Graphics.PreferredBackBufferHeight;
-            OriginalScreenWidthMiddle = OriginalScreenWidth / 2;
-            Scale = (float)OriginalScreenHeight / Utils.BASE_BACKGROUND_HEIGHT <= 1 ? (float)OriginalScreenHeight / Utils.BASE_BACKGROUND_HEIGHT : 1;
+            SpriteBatch = new SpriteBatch(Device);
         }
 
         public void Initialize()
@@ -42,11 +40,17 @@ namespace CumulusAndroid
 
             Graphics.IsFullScreen = true;
             Graphics.SupportedOrientations = DisplayOrientation.Portrait;
-            Graphics.PreferredBackBufferWidth = Utils.BASE_BACKGROUND_WIDTH;
-            Graphics.PreferredBackBufferHeight = Utils.BASE_BACKGROUND_HEIGHT;
             Graphics.SynchronizeWithVerticalRetrace = false;
             Graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Graphics.ApplyChanges();
+            bool letterbox =
+                (Graphics.PreferredBackBufferHeight / (float)Graphics.PreferredBackBufferWidth) <
+                Utils.SCREEN_WIDTH / (float)Utils.SCREEN_HEIGHT;
+            Resolution = new ResolutionComponent(Instance, Graphics,
+                new Point(Utils.SCREEN_WIDTH, Utils.SCREEN_HEIGHT),
+                new Point(Graphics.PreferredBackBufferHeight, Graphics.PreferredBackBufferWidth),
+                false, letterbox);
+
 
             SetGameState(GameState.Menu);
         }
@@ -60,7 +64,16 @@ namespace CumulusAndroid
         public void Draw()
         {
             Device.Clear(Color.Black);
+            SpriteBatch.Begin(SpriteSortMode.Immediate,
+                BlendState.AlphaBlend,
+                null, null, null, null,
+                Resolution.TransformationMatrix());
             CurrentScreen?.Draw();
+#if RELEASE
+            SpriteBatch.DrawString(Assets.Pixel30, "Version : " + VersionTracking.CurrentVersion, 
+                Utils.GetPositionOnScreenByPercent(0.05f, 0.95f), Color.Black);
+#endif
+            SpriteBatch.End();
         }
 
         private static void SetScreen(Screen screen)
@@ -89,16 +102,6 @@ namespace CumulusAndroid
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-
-        public static int GetScreenWidthPositionByPercent(float percent)
-        {
-            return (int)(OriginalScreenWidth * percent);
-        }
-
-        public static int GetScreenHeightPositionByPercent(float percent)
-        {
-            return (int)(OriginalScreenHeight * percent);
         }
     }
 }

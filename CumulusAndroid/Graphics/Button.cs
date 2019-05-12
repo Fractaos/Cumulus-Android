@@ -17,7 +17,9 @@ namespace CumulusAndroid.Graphics
         private Rectangle _hitbox;
 
         private readonly Texture2D _background;
-        private Texture2D _drawedHitbox;
+        private readonly Texture2D _drawedHitbox;
+
+        private readonly Color _hoverColor;
 
         private readonly SpriteFont _font = Assets.Pixel30;
 
@@ -36,15 +38,21 @@ namespace CumulusAndroid.Graphics
 
         #region Constructors
 
-        public Button(Vector2 position, Texture2D background, string title, float scaleRelativeToScreen)
+        public Button(Vector2 position, Texture2D background, string title, float scaleRelativeToScreenWidth)
         {
             var (x, y) = position;
             Title = title;
             _background = background;
-            _buttonScale = (Main.OriginalScreenWidth * scaleRelativeToScreen) / background.Width;
+            _buttonScale = (Utils.SCREEN_WIDTH * scaleRelativeToScreenWidth) / background.Width;
             _position = new Vector2(x - (background.Width / 2f) * _buttonScale, y - (background.Height / 2f) * _buttonScale);
             _hitbox = new Rectangle((int)_position.X, (int)_position.Y, (int)(background.Width * _buttonScale), (int)(background.Height * _buttonScale));
             _drawedHitbox = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
+
+#if DEBUG
+            _hoverColor = Color.OrangeRed;
+#else
+            _hoverColor = Color.Orange;
+#endif
         }
 
         #endregion
@@ -70,13 +78,15 @@ namespace CumulusAndroid.Graphics
         {
             if (_hovered)
             {
-                spriteBatch.Draw(_background, _position, null, Color.Yellow * opacity, 0f, Vector2.Zero, _buttonScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(_background, _position, null, _hoverColor * opacity, 0f, Vector2.Zero, _buttonScale, SpriteEffects.None, 0f);
             }
             else
             {
                 spriteBatch.Draw(_background, _position, null, Color.White * opacity, 0f, Vector2.Zero, _buttonScale, SpriteEffects.None, 0f);
             }
-            //spriteBatch.Draw(_drawedHitbox, _position, Color.White * opacity);
+#if DEBUG
+            spriteBatch.Draw(_drawedHitbox, _position, Color.White * opacity);
+#endif
             if (Title != null)
             {
                 spriteBatch.DrawString(_font, Title, new Vector2(_hitbox.Center.X - (_font.MeasureString(Title).X / 2),

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using ResolutionBuddy;
 
 namespace CumulusAndroid.Utility
 {
@@ -14,7 +15,7 @@ namespace CumulusAndroid.Utility
         public static Rectangle MouseBox;
         public static Vector2 MousePos;
 
-        public static Vector2 FirstTouchPosition => _currentT.Count > 0 ? _currentT[0].Position : Vector2.Zero;
+        public static Vector2 FirstTouchPosition => _currentT.Count > 0 ? Resolution.ScreenToGameCoord(_currentT[0].Position) : Vector2.Zero;
 
         public static void Update()
         {

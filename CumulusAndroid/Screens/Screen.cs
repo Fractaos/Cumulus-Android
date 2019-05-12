@@ -9,7 +9,7 @@ namespace CumulusAndroid.Screens
 
         protected Screen()
         {
-            _spriteBatch = new SpriteBatch(Main.Device);
+            _spriteBatch = Main.SpriteBatch;
         }
 
         public abstract void Create();

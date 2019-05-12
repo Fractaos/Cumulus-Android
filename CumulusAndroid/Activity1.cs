@@ -5,13 +5,13 @@ using Android.Views;
 
 namespace CumulusAndroid
 {
-    [Activity(Label = "CumulusAndroid"
+    [Activity(Label = "Cumulus"
         , MainLauncher = true
         , Icon = "@drawable/icon"
         , Theme = "@style/Theme.Splash"
         , AlwaysRetainTaskState = true
         , LaunchMode = Android.Content.PM.LaunchMode.SingleInstance
-        , ScreenOrientation = ScreenOrientation.FullUser
+        , ScreenOrientation = ScreenOrientation.Portrait
         , ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize | ConfigChanges.ScreenLayout)]
     public class Activity1 : Microsoft.Xna.Framework.AndroidGameActivity
     {
