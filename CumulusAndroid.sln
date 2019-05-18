@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CumulusAndroid", "CumulusAndroid\CumulusAndroid.csproj", "{E6712EEF-421A-454A-AAFB-F6402E731201}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cumulus.UnitTests", "Cumulus.UnitTests\Cumulus.UnitTests.csproj", "{0E545DF7-EF69-4250-BA28-D5851D7B2759}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{E6712EEF-421A-454A-AAFB-F6402E731201}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6712EEF-421A-454A-AAFB-F6402E731201}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6712EEF-421A-454A-AAFB-F6402E731201}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0E545DF7-EF69-4250-BA28-D5851D7B2759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E545DF7-EF69-4250-BA28-D5851D7B2759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E545DF7-EF69-4250-BA28-D5851D7B2759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E545DF7-EF69-4250-BA28-D5851D7B2759}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
