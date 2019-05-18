@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CumulusAndroid.Utility.Tween
+namespace Cumulus.Utility.Tween
 {
     public static class Ease
     {

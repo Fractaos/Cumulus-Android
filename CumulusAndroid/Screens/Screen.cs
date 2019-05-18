@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CumulusAndroid.Screens
+namespace Cumulus.Screens
 {
     public abstract class Screen
     {

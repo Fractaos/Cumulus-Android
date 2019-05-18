@@ -1,6 +1,6 @@
-﻿using CumulusAndroid.Graphics;
-using CumulusAndroid.Screens;
-using CumulusAndroid.Utility;
+﻿using Cumulus.Graphics;
+using Cumulus.Screens;
+using Cumulus.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,9 +8,9 @@ using ResolutionBuddy;
 using System;
 using Xamarin.Essentials;
 using DisplayOrientation = Microsoft.Xna.Framework.DisplayOrientation;
-using Screen = CumulusAndroid.Screens.Screen;
+using Screen = Cumulus.Screens.Screen;
 
-namespace CumulusAndroid
+namespace Cumulus
 {
     public class Main
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CumulusAndroid.Utility.Tween
+namespace Cumulus.Utility.Tween
 {
     public class TweenPosition
     {

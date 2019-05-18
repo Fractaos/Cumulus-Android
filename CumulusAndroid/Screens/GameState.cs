@@ -1,4 +1,4 @@
-﻿namespace CumulusAndroid.Screens
+﻿namespace Cumulus.Screens
 {
     public enum GameState
     {

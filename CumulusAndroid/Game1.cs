@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace CumulusAndroid
+namespace Cumulus
 {
     public class Game1 : Game
     {

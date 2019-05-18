@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace CumulusAndroid.Utility
+namespace Cumulus.Utility
 {
     public static class Utils
     {

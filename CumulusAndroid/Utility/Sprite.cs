@@ -1,8 +1,8 @@
-﻿using CumulusAndroid.Utility.Tween;
+﻿using Cumulus.Utility.Tween;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CumulusAndroid.Utility
+namespace Cumulus.Utility
 {
     public class Sprite
     {

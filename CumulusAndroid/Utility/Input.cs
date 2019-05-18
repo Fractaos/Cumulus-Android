@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using ResolutionBuddy;
 
-namespace CumulusAndroid.Utility
+namespace Cumulus.Utility
 {
     class Input
     {

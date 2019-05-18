@@ -1,9 +1,9 @@
-﻿using CumulusAndroid.Utility;
+﻿using Cumulus.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace CumulusAndroid.Graphics
+namespace Cumulus.Graphics
 {
     public class Button
     {

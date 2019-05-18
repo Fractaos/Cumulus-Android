@@ -1,4 +1,4 @@
-﻿namespace CumulusAndroid.Utility.Tween
+﻿namespace Cumulus.Utility.Tween
 {
     public enum EaseFunction
     {

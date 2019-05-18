@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace CumulusAndroid.Graphics
+namespace Cumulus.Graphics
 {
     public enum SkinType
     {
