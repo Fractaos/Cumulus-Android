@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace Cumulus.Graphics
+namespace CumulusGame.Graphics
 {
     public enum SkinType
     {

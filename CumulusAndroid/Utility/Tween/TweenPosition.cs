@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Cumulus.Utility.Tween
+namespace CumulusGame.Utility.Tween
 {
     public class TweenPosition
     {

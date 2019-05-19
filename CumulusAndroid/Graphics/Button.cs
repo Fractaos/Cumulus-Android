@@ -1,9 +1,9 @@
-﻿using Cumulus.Utility;
+﻿using CumulusGame.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Cumulus.Graphics
+namespace CumulusGame.Graphics
 {
     public class Button
     {

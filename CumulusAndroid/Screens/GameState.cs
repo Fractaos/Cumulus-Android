@@ -1,4 +1,4 @@
-﻿namespace Cumulus.Screens
+﻿namespace CumulusGame.Screens
 {
     public enum GameState
     {

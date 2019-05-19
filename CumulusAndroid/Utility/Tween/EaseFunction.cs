@@ -1,4 +1,4 @@
-﻿namespace Cumulus.Utility.Tween
+﻿namespace CumulusGame.Utility.Tween
 {
     public enum EaseFunction
     {

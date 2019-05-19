@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Cumulus
+namespace CumulusGame
 {
     public class Game1 : Game
     {

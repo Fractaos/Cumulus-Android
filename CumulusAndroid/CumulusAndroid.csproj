@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cumulus</RootNamespace>
-    <AssemblyName>Cumulus</AssemblyName>
+    <RootNamespace>CumulusGame</RootNamespace>
+    <AssemblyName>CumulusGame</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -181,9 +181,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity1.cs" />
+    <Compile Include="Entity\Cumulus.cs" />
+    <Compile Include="Entity\Fertilizers\Fertilizer.cs" />
+    <Compile Include="Entity\Fertilizers\LargeFertilizer.cs" />
+    <Compile Include="Entity\Fertilizers\LittleFertilizer.cs" />
+    <Compile Include="Entity\Fertilizers\MediumFertilizer.cs" />
+    <Compile Include="Entity\GameEntity.cs" />
+    <Compile Include="Entity\Rock.cs" />
+    <Compile Include="Entity\UsableObject.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Assets.cs" />
+    <Compile Include="Graphics\Background.cs" />
     <Compile Include="Graphics\Button.cs" />
+    <Compile Include="Graphics\Cell.cs" />
+    <Compile Include="Graphics\Grid.cs" />
+    <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\GameState.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -192,6 +205,7 @@
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\TestScreen.cs" />
     <Compile Include="Utility\Input.cs" />
+    <Compile Include="Utility\Score.cs" />
     <Compile Include="Utility\Sprite.cs" />
     <Compile Include="Utility\Tween\Ease.cs" />
     <Compile Include="Utility\Tween\EaseFunction.cs" />

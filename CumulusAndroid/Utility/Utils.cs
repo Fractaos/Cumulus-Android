@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CumulusGame.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Cumulus.Utility
+namespace CumulusGame.Utility
 {
     public static class Utils
     {
@@ -39,7 +40,7 @@ namespace Cumulus.Utility
 
         public static bool IntroPlayed = false;
 
-        //public static Grid GameGrid = new Grid();
+        public static Grid GameGrid = new Grid();
 
         public static Random Random = new Random();
 

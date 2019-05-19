@@ -1,8 +1,8 @@
-﻿using Cumulus.Utility.Tween;
+﻿using CumulusGame.Utility.Tween;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Cumulus.Utility
+namespace CumulusGame.Utility
 {
     public class Sprite
     {

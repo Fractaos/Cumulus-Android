@@ -3,7 +3,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 
-namespace Cumulus
+namespace CumulusGame
 {
     [Activity(Label = "Cumulus"
         , MainLauncher = true

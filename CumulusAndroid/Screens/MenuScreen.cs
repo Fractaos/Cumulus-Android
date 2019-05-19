@@ -1,12 +1,12 @@
 using Android.OS;
-using Cumulus.Graphics;
-using Cumulus.Utility;
-using Cumulus.Utility.Tween;
+using CumulusGame.Graphics;
+using CumulusGame.Utility;
+using CumulusGame.Utility.Tween;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Cumulus.Screens
+namespace CumulusGame.Screens
 {
     public class MenuScreen : Screen
     {

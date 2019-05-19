@@ -1,4 +1,4 @@
-using Cumulus.Utility;
+using CumulusGame.Utility;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 

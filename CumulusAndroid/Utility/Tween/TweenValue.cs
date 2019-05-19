@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cumulus.Utility.Tween
+namespace CumulusGame.Utility.Tween
 {
     public class TweenValue
     {

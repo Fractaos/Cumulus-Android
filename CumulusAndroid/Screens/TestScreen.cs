@@ -1,8 +1,8 @@
-﻿using Cumulus.Graphics;
+﻿using CumulusGame.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Cumulus.Screens
+namespace CumulusGame.Screens
 {
     public class TestScreen : Screen
     {

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using ResolutionBuddy;
 
-namespace Cumulus.Utility
+namespace CumulusGame.Utility
 {
     class Input
     {
