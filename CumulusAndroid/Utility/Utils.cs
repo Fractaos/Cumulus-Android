@@ -1,7 +1,10 @@
-﻿using CumulusGame.Graphics;
+﻿using CumulusGame.Entity;
+using CumulusGame.Entity.Fertilizers;
+using CumulusGame.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace CumulusGame.Utility
 {
@@ -34,9 +37,9 @@ namespace CumulusGame.Utility
         public static float TimeElapsedSinceStartEating = 0;
         public static float TimeElapsedSinceStartBreaking = 0;
 
-        //public static SkinType CurrentSkin = SkinType.CumulusBase;
+        public static SkinType CurrentSkin = SkinType.CumulusBase;
 
-        //public static UsableObject CurrentObjectSelected = UsableObject.LittleFertilizer;
+        public static UsableObject CurrentObjectSelected = UsableObject.LittleFertilizer;
 
         public static bool IntroPlayed = false;
 
@@ -102,6 +105,102 @@ namespace CumulusGame.Utility
             texture.SetData(colors);
 
             return texture;
+        }
+
+        /// <summary>
+        /// Create a rock at the position
+        /// </summary>
+        /// <param name="position">The position</param>
+        /// <param name="rocksList">The rock list</param>
+        /// <param name="gameEntities">The game entity list</param>
+        public static void CreateRock(Cell position, List<Rock> rocksList, List<GameEntity> gameEntities)
+        {
+            if (Rock.CooldownUp())
+            {
+                var newRock = new Rock(position);
+                Rock.OnCooldown();
+                rocksList.Add(newRock);
+                gameEntities.Add(newRock);
+                foreach (GameEntity entity in gameEntities)
+                {
+                    if (entity is Cumulus tempCumulus)
+                    {
+                        tempCumulus.AddObstacle(newRock);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create a little fertilizer at the position
+        /// </summary>
+        /// <param name="position">The position</param>
+        /// <param name="fertilizersList">The fertilizer list</param>
+        /// <param name="gameEntities">The game entity list</param>
+        public static void CreateLittleFertilizer(Vector2 position, List<Fertilizer> fertilizersList, List<GameEntity> gameEntities)
+        {
+            if (LittleFertilizer.CooldownUp())
+            {
+                var newFerti = new LittleFertilizer(new Vector2(position.X, position.Y));
+                LittleFertilizer.OnCooldown();
+                fertilizersList.Add(newFerti);
+                gameEntities.Add(newFerti);
+                foreach (GameEntity gameEntity in gameEntities)
+                {
+                    if (gameEntity is Cumulus tempCumu)
+                    {
+                        tempCumu.AddTarget(newFerti);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create a medium fertilizer at the position
+        /// </summary>
+        /// <param name="position">The position</param>
+        /// <param name="fertilizersList">The fertilizer list</param>
+        /// <param name="gameEntities">The game entity list</param>
+        public static void CreateMediumFertilizer(Vector2 position, List<Fertilizer> fertilizersList, List<GameEntity> gameEntities)
+        {
+            if (MediumFertilizer.CooldownUp())
+            {
+                var newFerti = new MediumFertilizer(new Vector2(position.X, position.Y));
+                MediumFertilizer.OnCooldown();
+                fertilizersList.Add(newFerti);
+                gameEntities.Add(newFerti);
+                foreach (GameEntity gameEntity in gameEntities)
+                {
+                    if (gameEntity is Cumulus tempCumu)
+                    {
+                        tempCumu.AddTarget(newFerti);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create a large fertilizer at the position
+        /// </summary>
+        /// <param name="position">The position</param>
+        /// <param name="fertilizersList">The fertilizer list</param>
+        /// <param name="gameEntities">The game entity list</param>
+        public static void CreateLargeFertilizer(Vector2 position, List<Fertilizer> fertilizersList, List<GameEntity> gameEntities)
+        {
+            if (LargeFertilizer.CooldownUp())
+            {
+                var newFerti = new LargeFertilizer(new Vector2(position.X, position.Y));
+                LargeFertilizer.OnCooldown();
+                fertilizersList.Add(newFerti);
+                gameEntities.Add(newFerti);
+                foreach (var gameEntity in gameEntities)
+                {
+                    if (gameEntity is Cumulus tempCumu)
+                    {
+                        tempCumu.AddTarget(newFerti);
+                    }
+                }
+            }
         }
 
     }

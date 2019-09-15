@@ -10,14 +10,14 @@ namespace CumulusGame.Entity
         #region Fields & Properties
 
         // Constant
-        private const float RockScale = Utils.SCALE * 0.6f;
-        private const float LightScale = Utils.SCALE * 0.8f;
+        private const float ROCK_SCALE = 0.6f;
+        private const float LIGHT_SCALE = 0.8f;
 
         // Differents cooldown fields 
         private static float _timeElapsedSinceLastCreated;
 
-        private const float FixedCooldown = 1000;
-        private const float BreakTime = 500;
+        private const float FIXED_COOLDOWN = 1000;
+        private const float BREAK_TIME = 500;
 
         // Graphics fields
         private readonly Animation _spriteAnimated;
@@ -28,8 +28,8 @@ namespace CumulusGame.Entity
         public bool Broken { get; set; }
         public bool Animate { get; private set; }
         public float TimeToBreak { get; }
-        public static float BaseCooldown => FixedCooldown;
-        public static float CurrentCooldown { get; private set; } = FixedCooldown;
+        public static float BaseCooldown => FIXED_COOLDOWN;
+        public static float CurrentCooldown { get; private set; } = FIXED_COOLDOWN;
 
         #endregion
 
@@ -43,12 +43,24 @@ namespace CumulusGame.Entity
         {
             cellOn = position;
             cellOn.IsEmpty = false;
-            TimeToBreak = BreakTime;
-            this.position = new Vector2(cellOn.Position.X - (((((float)Assets.Rock.Width / 6) * RockScale) - Utils.CELL_SIZE) / 2),
-                cellOn.Position.Y - (((float)Assets.Rock.Height / 2) * RockScale));
-            _spriteAnimated = new Animation(this.position, 350, 6, Assets.Rock, TypeOfSheet.Horizontal, false, RockScale);
-            _lightning = new Animation(new Vector2(this.position.X - (30 * Utils.SCALE),
-                this.position.Y - (cellOn.Hitbox.Height - (30 * Utils.SCALE))), 350, 7, Assets.Lightning, TypeOfSheet.Horizontal, false, LightScale);
+            TimeToBreak = BREAK_TIME;
+            this.position = new Vector2(cellOn.Position.X - (((((float)Assets.Rock.Width / 6) * ROCK_SCALE) - Utils.CELL_SIZE) / 2),
+                cellOn.Position.Y - (((float)Assets.Rock.Height / 2) * ROCK_SCALE));
+            _spriteAnimated = new Animation(this.position,
+                350,
+                6,
+                Assets.Rock,
+                TypeOfSheet.Horizontal,
+                false,
+                ROCK_SCALE);
+            _lightning = new Animation(new Vector2(this.position.X - 30,
+                this.position.Y - (cellOn.Hitbox.Height - 30)),
+                350,
+                7,
+                Assets.Lightning,
+                TypeOfSheet.Horizontal,
+                false,
+                LIGHT_SCALE);
         }
 
         #endregion
@@ -106,8 +118,9 @@ namespace CumulusGame.Entity
             _spriteAnimated.Draw(spriteBatch, Utils.ENTITY_DEPTH);
             if (Animate)
             {
-                _blackShader = Utils.CreateRectangleTexture(Utils.Window_Width, Utils.Window_Height, Color.Black);
-                spriteBatch.Draw(_blackShader, new Vector2(0, 0), null, Color.White * 0.2f, 0f, Vector2.Zero, 1, SpriteEffects.None, 0.3f);
+                _blackShader = Utils.CreateRectangleTexture(Utils.SCREEN_WIDTH, Utils.SCREEN_HEIGHT, Color.Black);
+                spriteBatch.Draw(_blackShader, new Vector2(0, 0), null, Color.White * 0.2f,
+                    0f, Vector2.Zero, 1, SpriteEffects.None, 0.3f);
                 _lightning.Draw(spriteBatch, 1);
             }
         }

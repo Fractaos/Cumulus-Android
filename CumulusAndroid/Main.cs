@@ -14,22 +14,22 @@ namespace CumulusGame
 {
     public class Main
     {
-        public static GraphicsDeviceManager Graphics;
+        private static GraphicsDeviceManager _graphics;
         public static GraphicsDevice Device;
-        public static Game Instance;
+        private static Game _instance;
         public static ContentManager Content;
-        public static Screen CurrentScreen;
+        private static Screen _currentScreen;
         public static SpriteBatch SpriteBatch;
-        public static IResolution Resolution;
+        private static IResolution _resolution;
 
-        public static GameState GameState;
+        private static GameState _gameState;
 
         public Main(GraphicsDeviceManager graphics, Game game)
         {
             VersionTracking.Track();
-            Graphics = graphics;
+            _graphics = graphics;
             Device = graphics.GraphicsDevice;
-            Instance = game;
+            _instance = game;
             Content = game.Content;
             SpriteBatch = new SpriteBatch(Device);
         }
@@ -38,17 +38,19 @@ namespace CumulusGame
         {
             Assets.LoadAll();
 
-            Graphics.IsFullScreen = true;
-            Graphics.SupportedOrientations = DisplayOrientation.Portrait;
-            Graphics.SynchronizeWithVerticalRetrace = false;
-            Graphics.GraphicsProfile = GraphicsProfile.HiDef;
-            Graphics.ApplyChanges();
+            _graphics.IsFullScreen = true;
+            _graphics.SupportedOrientations = DisplayOrientation.Portrait;
+            _graphics.SynchronizeWithVerticalRetrace = false;
+            _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            _graphics.ApplyChanges();
+            int realWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            int realHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             bool letterbox =
-                (Graphics.PreferredBackBufferHeight / (float)Graphics.PreferredBackBufferWidth) <
+                (realWidth / (float)realHeight) <
                 Utils.SCREEN_WIDTH / (float)Utils.SCREEN_HEIGHT;
-            Resolution = new ResolutionComponent(Instance, Graphics,
+            _resolution = new ResolutionComponent(_instance, _graphics,
                 new Point(Utils.SCREEN_WIDTH, Utils.SCREEN_HEIGHT),
-                new Point(Graphics.PreferredBackBufferHeight, Graphics.PreferredBackBufferWidth),
+                new Point(realWidth, realHeight),
                 false, letterbox);
 
 
@@ -58,7 +60,7 @@ namespace CumulusGame
         public void Update(GameTime time)
         {
             Input.Update();
-            CurrentScreen?.Update(time);
+            _currentScreen?.Update(time);
         }
 
         public void Draw()
@@ -67,10 +69,10 @@ namespace CumulusGame
             SpriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.AlphaBlend,
                 null, null, null, null,
-                Resolution.TransformationMatrix());
-            CurrentScreen?.Draw();
-#if RELEASE
-            SpriteBatch.DrawString(Assets.Pixel30, "Version : " + VersionTracking.CurrentVersion, 
+                _resolution.TransformationMatrix());
+            _currentScreen?.Draw();
+#if !DEBUG
+            SpriteBatch.DrawString(Assets.Pixel30, "Version : " + VersionTracking.CurrentVersion,
                 Utils.GetPositionOnScreenByPercent(0.05f, 0.95f), Color.Black);
 #endif
             SpriteBatch.End();
@@ -78,17 +80,17 @@ namespace CumulusGame
 
         private static void SetScreen(Screen screen)
         {
-            CurrentScreen = screen;
-            CurrentScreen.Create();
+            _currentScreen = screen;
+            _currentScreen.Create();
         }
 
         public static void SetGameState(GameState newGameState)
         {
-            GameState = newGameState;
-            switch (GameState)
+            _gameState = newGameState;
+            switch (_gameState)
             {
                 case GameState.Game:
-                    //SetScreen(new GameScreen());
+                    SetScreen(new GameScreen());
                     break;
                 case GameState.Menu:
                     SetScreen(new MenuScreen());
@@ -100,7 +102,7 @@ namespace CumulusGame
                     SetScreen(new TestScreen());
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new IndexOutOfRangeException();
             }
         }
     }

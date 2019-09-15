@@ -69,12 +69,7 @@ namespace CumulusGame.Graphics
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            Draw(spriteBatch, 1f);
-        }
-
-        public void Draw(SpriteBatch spriteBatch, float opacity)
+        public void Draw(SpriteBatch spriteBatch, float opacity = 1f)
         {
             if (_hovered)
             {

@@ -19,7 +19,7 @@ namespace CumulusGame.Screens
         private bool _controlEnabled;
         private float _timeCounter;
 
-        private const float HUD_Y_POSITION = Utils.SCREEN_HEIGHT - 180f;
+        private const float HUD_Y_POSITION = Utils.SCREEN_HEIGHT - (Utils.SCREEN_HEIGHT * 0.05f);
 
         // Graphics fields
         private Background _bg;
@@ -48,7 +48,7 @@ namespace CumulusGame.Screens
             _controlEnabled = false;
             _bg = new Background();
 
-            _backButton = new Button(new Vector2(10, 10), Assets.ButtonArrow, null, .1f);
+            _backButton = new Button(new Vector2(Utils.SCREEN_WIDTH * 0.08f, Utils.SCREEN_WIDTH * 0.05f), Assets.ButtonArrow, null, .1f);
             _backButton.Click += BackButton_Click;
             _buttons.Add(_backButton);
 
@@ -64,7 +64,7 @@ namespace CumulusGame.Screens
         public override void Update(GameTime gameTime)
         {
             //Get the mouse
-            var mouse = Mouse.GetState();
+            MouseState mouse = Mouse.GetState();
 
             //Update all Fertilizer and Rock time passed and cooldown
             LittleFertilizer.UpdateElapsedTime(gameTime.ElapsedGameTime.Milliseconds);
@@ -75,7 +75,7 @@ namespace CumulusGame.Screens
             //Lock the control during the beginning of the game
             if (_controlEnabled)
             {
-                Utils.GameGrid.CreateObjectOnCell(mouse, _fertilizers, _rocks, _gameEntities);
+                Utils.GameGrid.CreateObjectOnCell(_fertilizers, _rocks, _gameEntities);
             }
             else
             {
@@ -90,12 +90,12 @@ namespace CumulusGame.Screens
 
             _cumulus.Update(gameTime);
             Utils.GameGrid.Update(gameTime);
-            foreach (var fertilizer in _fertilizers)
+            foreach (Fertilizer fertilizer in _fertilizers)
             {
                 fertilizer.Update(gameTime);
             }
 
-            foreach (var rock in _rocks)
+            foreach (Rock rock in _rocks)
             {
                 rock.Update(gameTime);
             }
@@ -128,7 +128,6 @@ namespace CumulusGame.Screens
 
         public override void Draw()
         {
-            _spriteBatch.Begin();
             {
                 _bg.Draw(_spriteBatch);
                 Utils.GameGrid.Draw(_spriteBatch);
@@ -143,7 +142,6 @@ namespace CumulusGame.Screens
 
                 _score.Draw(_spriteBatch);
             }
-            _spriteBatch.End();
             _hud.Draw(_spriteBatch);
         }
 
@@ -153,8 +151,8 @@ namespace CumulusGame.Screens
 
         private class UserInterface
         {
-            private const float WIDTH_PERCENT_ICON = Utils.SCREEN_WIDTH * 0.15f;
-            private const float WIDTH_PERCENT_SPACE = Utils.SCREEN_WIDTH * 0.08f;
+            private const float WIDTH_PERCENT_ICON = Utils.SCREEN_WIDTH * 0.08f;
+            private const float WIDTH_PERCENT_SPACE = Utils.SCREEN_WIDTH * 0.15f;
             private readonly float _scale = WIDTH_PERCENT_ICON / Assets.IconeLittleFertilizer.Width;
             private const float X_START_POSITION = WIDTH_PERCENT_SPACE;
             private readonly List<ObjectButton> _theButtons;
@@ -224,12 +222,13 @@ namespace CumulusGame.Screens
             {
                 if (!CooldownUp(type))
                 {
-                    _effect.CurrentTechnique.Passes[0].Apply();
-                    _effect.Parameters["percent"].SetValue(_percentCircle);
-                    _effect.Parameters["R"].SetValue(_theColor.X);
-                    _effect.Parameters["G"].SetValue(_theColor.Y);
-                    _effect.Parameters["B"].SetValue(_theColor.Z);
-                    _effect.Parameters["A"].SetValue(_theColor.W);
+                    //TODO : à traiter pour version mobile ~ (SHADERS)
+                    //_effect.CurrentTechnique.Passes[0].Apply();
+                    //_effect.Parameters["percent"].SetValue(_percentCircle);
+                    //_effect.Parameters["R"].SetValue(_theColor.X);
+                    //_effect.Parameters["G"].SetValue(_theColor.Y);
+                    //_effect.Parameters["B"].SetValue(_theColor.Z);
+                    //_effect.Parameters["A"].SetValue(_theColor.W);
                     spriteBatch.Draw(_cooldownCircle,
                         new Vector2(
                             Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * _cooldownCircle.Width),
@@ -284,7 +283,7 @@ namespace CumulusGame.Screens
             public LittleFertilizerButton(Vector2 position, float scale) : base(position, Assets.EffectLittle, scale)
             {
                 _percentCirclePerUpdate = _percentCircle / LittleFertilizer.CurrentCooldown;
-                _button = new Button(Position, Assets.IconeLittleFertilizer, Scale);
+                _button = new Button(Position, Assets.IconeLittleFertilizer, null, Scale);
                 _button.Click += Button_Click;
             }
 
@@ -301,18 +300,10 @@ namespace CumulusGame.Screens
 
             }
 
-            public override void Draw(_spriteBatch _spriteBatch)
+            public override void Draw(SpriteBatch spriteBatch)
             {
-                _spriteBatch.Begin();
-                {
-                    _button.Draw(_spriteBatch);
-                }
-                _spriteBatch.End();
-                _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                {
-                    DrawShader(typeof(LittleFertilizer), _spriteBatch);
-                }
-                _spriteBatch.End();
+                _button.Draw(spriteBatch);
+                DrawShader(typeof(LittleFertilizer), spriteBatch);
             }
         }
 
@@ -321,7 +312,7 @@ namespace CumulusGame.Screens
             public MediumFertilizerButton(Vector2 position, float scale) : base(position, Assets.EffectMedium, scale)
             {
                 _percentCirclePerUpdate = _percentCircle / MediumFertilizer.CurrentCooldown;
-                _button = new Button(Position, Assets.IconeMediumFertilizer, Scale);
+                _button = new Button(Position, Assets.IconeMediumFertilizer, null, Scale);
                 _button.Click += Button_Click; ;
             }
 
@@ -337,18 +328,10 @@ namespace CumulusGame.Screens
                 UpdatePercentCircle(typeof(MediumFertilizer), gameTime);
             }
 
-            public override void Draw(_spriteBatch _spriteBatch)
+            public override void Draw(SpriteBatch spriteBatch)
             {
-                _spriteBatch.Begin();
-                {
-                    _button.Draw(_spriteBatch);
-                }
-                _spriteBatch.End();
-                _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                {
-                    DrawShader(typeof(MediumFertilizer), _spriteBatch);
-                }
-                _spriteBatch.End();
+                _button.Draw(spriteBatch);
+                DrawShader(typeof(MediumFertilizer), spriteBatch);
             }
         }
 
@@ -357,7 +340,7 @@ namespace CumulusGame.Screens
             public LargeFertilizerButton(Vector2 position, float scale) : base(position, Assets.EffectLarge, scale)
             {
                 _percentCirclePerUpdate = _percentCircle / LargeFertilizer.CurrentCooldown;
-                _button = new Button(Position, Assets.IconeLargeFertilizer, Scale);
+                _button = new Button(Position, Assets.IconeLargeFertilizer, null, Scale);
                 _button.Click += Button_Click; ;
             }
 
@@ -373,18 +356,10 @@ namespace CumulusGame.Screens
                 UpdatePercentCircle(typeof(LargeFertilizer), gameTime);
             }
 
-            public override void Draw(_spriteBatch _spriteBatch)
+            public override void Draw(SpriteBatch spriteBatch)
             {
-                _spriteBatch.Begin();
-                {
-                    _button.Draw(_spriteBatch);
-                }
-                _spriteBatch.End();
-                _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                {
-                    DrawShader(typeof(LargeFertilizer), _spriteBatch);
-                }
-                _spriteBatch.End();
+                _button.Draw(spriteBatch);
+                DrawShader(typeof(LargeFertilizer), spriteBatch);
             }
         }
 
@@ -393,7 +368,7 @@ namespace CumulusGame.Screens
             public RockButton(Vector2 position, float scale) : base(position, Assets.EffectRock, scale)
             {
                 _percentCirclePerUpdate = _percentCircle / Rock.CurrentCooldown;
-                _button = new Button(Position, Assets.IconeRock, Scale);
+                _button = new Button(Position, Assets.IconeRock, null, Scale);
                 _button.Click += Button_Click; ;
             }
 
@@ -409,18 +384,10 @@ namespace CumulusGame.Screens
                 UpdatePercentCircle(typeof(Rock), gameTime);
             }
 
-            public override void Draw(_spriteBatch _spriteBatch)
+            public override void Draw(SpriteBatch spriteBatch)
             {
-                _spriteBatch.Begin();
-                {
-                    _button.Draw(_spriteBatch);
-                }
-                _spriteBatch.End();
-                _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                {
-                    DrawShader(typeof(Rock), _spriteBatch);
-                }
-                _spriteBatch.End();
+                _button.Draw(spriteBatch);
+                DrawShader(typeof(Rock), spriteBatch);
             }
         }
 

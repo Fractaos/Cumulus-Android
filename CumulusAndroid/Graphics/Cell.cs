@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CumulusGame.Utility;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
@@ -10,12 +10,13 @@ namespace CumulusGame.Graphics
     {
         #region Fields
 
-        private const float HoverAlpha = 0.2f;
+        private const float HOVER_ALPHA = 0.2f;
         public float Size { get; }
 
         public bool InPath { get; set; } = false;
         public bool IsEmpty { get; set; } = true;
-        public bool Hovered { get; private set; }
+
+        public bool Hovered => Hitbox.Contains(Input.FirstTouchPosition);
 
         public int Row { get; }
         public int Column { get; }
@@ -25,10 +26,10 @@ namespace CumulusGame.Graphics
 
         public Rectangle Hitbox { get; }
 
-        private Texture2D _texture;
-        private Texture2D _contouringTexture;
+        private readonly Texture2D _texture;
+        private readonly Texture2D _contouringTexture;
 
-        private float _alpha = 1f;
+        private readonly float _alpha = 1f;
 
         #endregion
 
@@ -117,25 +118,25 @@ namespace CumulusGame.Graphics
         public List<Cell> GetNeighbours()
         {
             var neighbours = new List<Cell>();
-            var tempCell = Utils._gameGrid.GetCellByRowColumn(Column, Row - 1);
+            Cell tempCell = Utils.GameGrid.GetCellByRowColumn(Column, Row - 1);
             if (tempCell != null)
             {
                 neighbours.Add(tempCell);
             }
 
-            tempCell = Utils._gameGrid.GetCellByRowColumn(Column + 1, Row);
+            tempCell = Utils.GameGrid.GetCellByRowColumn(Column + 1, Row);
             if (tempCell != null)
             {
                 neighbours.Add(tempCell);
             }
 
-            tempCell = Utils._gameGrid.GetCellByRowColumn(Column, Row + 1);
+            tempCell = Utils.GameGrid.GetCellByRowColumn(Column, Row + 1);
             if (tempCell != null)
             {
                 neighbours.Add(tempCell);
             }
 
-            tempCell = Utils._gameGrid.GetCellByRowColumn(Column - 1, Row);
+            tempCell = Utils.GameGrid.GetCellByRowColumn(Column - 1, Row);
             if (tempCell != null)
             {
                 neighbours.Add(tempCell);
@@ -157,30 +158,33 @@ namespace CumulusGame.Graphics
         /// <summary>
         /// Set the cell to hovered if the mouse is on it
         /// </summary>
-        /// <param name="mouse">The mouse</param>
-        private void SetHoveredIfMouseOnCell(MouseState mouse)
+        //private void SetHoveredIfIsTouched()
+        //{
+        //    Hovered = Hitbox.Contains(Input.FirstTouchPosition);
+        //}
+
+        public override string ToString()
         {
-            Hovered = CheckIfCoordInCell(new Vector2(mouse.X, mouse.Y));
+            return Column + ";" + Row;
         }
 
         public void Update(GameTime gameTime)
         {
-            var mouse = Mouse.GetState();
-            SetHoveredIfMouseOnCell(mouse);
+            //SetHoveredIfIsTouched();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             if (Hovered)
             {
-                spriteBatch.Draw(_texture, Position, null, Color.Red * HoverAlpha, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
-                spriteBatch.Draw(_contouringTexture, Position, null, Color.Red * HoverAlpha, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
+                spriteBatch.Draw(_texture, Position, null, Color.Red * HOVER_ALPHA, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
+                spriteBatch.Draw(_contouringTexture, Position, null, Color.Red * HOVER_ALPHA, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
             }
             else if (InPath)
             {
                 spriteBatch.Draw(_texture, Position, null, Color.White * _alpha, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
 
-                spriteBatch.Draw(_texture, Position, null, Color.Red * HoverAlpha, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
+                spriteBatch.Draw(_texture, Position, null, Color.Red * HOVER_ALPHA, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
                 spriteBatch.Draw(_contouringTexture, Position, null, Color.Blue, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
             }
             else

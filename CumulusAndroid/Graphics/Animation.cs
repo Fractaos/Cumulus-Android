@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CumulusGame.Utility;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -82,6 +83,7 @@ namespace CumulusGame.Graphics
         /// Play the animation
         /// </summary>
         /// <param name="elapsedGameTimeInMillis">The game time elapsed since last update in milliseconds</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void Play(float elapsedGameTimeInMillis)
         {
             var timePerFrame = _animationDuration / _nbFrames;
@@ -111,7 +113,7 @@ namespace CumulusGame.Graphics
                         _drawRectangle.Y = _frameHeight * (_currentFrame - 1);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new IndexOutOfRangeException();
                 }
             }
         }
@@ -132,7 +134,7 @@ namespace CumulusGame.Graphics
                     _drawRectangle.Y = _frameHeight * (_currentFrame - 1);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new IndexOutOfRangeException();
             }
         }
 

@@ -35,7 +35,7 @@ namespace CumulusGame.Screens
 
         private static void PlayButtonClick(object sender, EventArgs e)
         {
-            //Main.SetGameState(GameState.Game);
+            Main.SetGameState(GameState.Game);
         }
 
         #endregion

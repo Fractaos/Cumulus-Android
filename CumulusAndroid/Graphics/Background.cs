@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CumulusGame.Utility;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CumulusGame.Graphics
@@ -8,9 +9,12 @@ namespace CumulusGame.Graphics
         #region Fields
 
         // Graphics fields
-        private Texture2D _texture, _hitboxTex;
-        private Vector2 _position;
-        private Rectangle _hitbox;
+        private readonly Texture2D _texture;
+        private readonly Vector2 _position;
+#if DEBUG
+        private readonly Texture2D _hitboxTex;
+        private readonly Rectangle _hitbox;
+#endif
 
         #endregion
 
@@ -44,22 +48,23 @@ namespace CumulusGame.Graphics
         {
             _texture = Assets.Background;
             _position = new Vector2(0, 0);
-            _hitbox = new Rectangle((int)_position.X, (int)(Utils.GameBoardOffset * Utils.SCALE), (int)(_texture.Width * Utils.SCALE),
-                (int)(_texture.Height * Utils.SCALE) - Utils.GameBoardOffset);
+#if DEBUG
+            _hitbox = new Rectangle((int)_position.X, Utils.GAMEBOARD_OFFSET, _texture.Width,
+                _texture.Height - Utils.GAMEBOARD_OFFSET);
             _hitboxTex = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
+#endif
         }
 
         #endregion
 
         #region Public Methods
 
-        public void Update(GameTime gameTime)
-        { }
-
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, Utils.SCALE, SpriteEffects.None, Utils.BACKGROUND_DEPTH);
-            //spriteBatch.Draw(_hitboxTex, _hitbox, Color.White);
+            spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, Utils.BACKGROUND_DEPTH);
+#if DEBUG
+            spriteBatch.Draw(_hitboxTex, _hitbox, Color.White);
+#endif
         }
 
         #endregion

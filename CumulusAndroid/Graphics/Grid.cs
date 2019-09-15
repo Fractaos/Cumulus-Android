@@ -1,5 +1,6 @@
 ﻿using CumulusGame.Entity;
 using CumulusGame.Entity.Fertilizers;
+using CumulusGame.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,18 +15,20 @@ namespace CumulusGame.Graphics
         #region Fields
 
         // Processing fields
-        private Cell[,] _cells;
+        private readonly Cell[,] _cells;
 
-        public int Width { get; }
-        public int Height { get; }
-        public int NbVerticalCell { get; }
-        public int NbHorizontalCell { get; }
+        private int Width { get; }
+        private int Height { get; }
+        private int NbVerticalCell { get; }
+        private int NbHorizontalCell { get; }
 
-        private Vector2 _position;
+        private readonly Vector2 _position;
 
         // Graphics fields
-        private Rectangle _hitbox;
-        private Texture2D _hitboxTex;
+#if DEBUG
+        private readonly Rectangle _hitbox;
+        private readonly Texture2D _hitboxTex;
+#endif
 
         public int Left => 0;
         public int Bottom => Height + (int)_position.Y;
@@ -41,11 +44,11 @@ namespace CumulusGame.Graphics
         /// </summary>
         public Grid()
         {
-            Width = Utils.Window_Width;
-            Height = (int)(Utils.Window_Height * 0.8f);
+            Width = Utils.SCREEN_WIDTH;
+            Height = (int)(Utils.SCREEN_HEIGHT * 0.8f);
             NbHorizontalCell = (int)(Width / Utils.CELL_SIZE);
             NbVerticalCell = (int)(Height / Utils.CELL_SIZE);
-            _position = new Vector2(((float)Width / NbHorizontalCell) - (Utils.CELL_SIZE / 2), Utils.GameBoardOffset + (((float)Height / NbVerticalCell) - (Utils.CELL_SIZE / 2)));
+            _position = new Vector2(((float)Width / NbHorizontalCell) - (Utils.CELL_SIZE / 2), Utils.GAMEBOARD_OFFSET + (((float)Height / NbVerticalCell) - (Utils.CELL_SIZE / 2)));
             _cells = new Cell[NbHorizontalCell, NbVerticalCell];
 
             for (var i = 0; i < NbHorizontalCell; i++)
@@ -62,14 +65,15 @@ namespace CumulusGame.Graphics
                     }
                     _position.Y += Utils.CELL_SIZE;
                 }
-                _position.Y = Utils.GameBoardOffset + (((float)Height / NbVerticalCell) - (Utils.CELL_SIZE / 2));
+                _position.Y = Utils.GAMEBOARD_OFFSET + (((float)Height / NbVerticalCell) - (Utils.CELL_SIZE / 2));
                 _position.X += Utils.CELL_SIZE;
             }
 
-            _position = new Vector2(((float)Width / NbHorizontalCell) - Utils.CELL_SIZE, Utils.GameBoardOffset + (Height / NbVerticalCell) - Utils.CELL_SIZE);
-
+            _position = new Vector2(((float)Width / NbHorizontalCell) - Utils.CELL_SIZE, Utils.GAMEBOARD_OFFSET + (Height / NbVerticalCell) - Utils.CELL_SIZE);
+#if DEBUG
             _hitbox = new Rectangle((int)_position.X, (int)_position.Y, Width, Height);
             _hitboxTex = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
+#endif
         }
 
         #endregion
@@ -81,7 +85,7 @@ namespace CumulusGame.Graphics
             return (cell.Column >= 0 && cell.Column < NbHorizontalCell && cell.Row >= 0 && cell.Row < NbVerticalCell);
         }
 
-        public bool CellIsInTheGrid(int column, int row)
+        private bool CellIsInTheGrid(int column, int row)
         {
             return (column >= 0 && column < NbHorizontalCell && row >= 0 && row < NbVerticalCell);
         }
@@ -101,66 +105,47 @@ namespace CumulusGame.Graphics
             return CellIsInTheGrid(column, row) ? _cells[column, row] : null;
         }
 
-        public void CreateRockOnCell(MouseState mouse, List<Rock> rocks, List<GameEntity> gameEntities)
+        public void CreateObjectOnCell(List<Fertilizer> fertilizers, List<Rock> rocks, List<GameEntity> gameEntities)
         {
-            foreach (var cell in _cells)
+            if (Input.OneTouched())
             {
-                if (Input.KeyPressed(Keys.Space, true))
+                Cell cell = GetCellByCoord(Input.FirstTouchPosition);
+                if (cell != null && cell.Hovered)
                 {
-                    if (cell.Hovered)
+                    if (cell.IsEmpty)
                     {
-                        if (cell.IsEmpty)
+                        switch (Utils.CurrentObjectSelected)
                         {
-                            Utils.CreateRock(cell,
-                                rocks, gameEntities);
+                            case UsableObject.Rock:
+
+                                Utils.CreateRock(cell,
+                                    rocks, gameEntities);
+                                break;
+                            case UsableObject.LittleFertilizer:
+                                Utils.CreateLittleFertilizer(new Vector2(cell.Position.X + (cell.Size / 2),
+                                        cell.Position.Y +
+                                        (cell.Size / 2)),
+                                    fertilizers, gameEntities);
+                                break;
+                            case UsableObject.MediumFertilizer:
+                                Utils.CreateMediumFertilizer(new Vector2(cell.Position.X + (cell.Size / 2),
+                                        cell.Position.Y +
+                                        (cell.Size / 2)),
+                                    fertilizers, gameEntities);
+                                break;
+                            case UsableObject.LargeFertilizer:
+                                Utils.CreateLargeFertilizer(new Vector2(cell.Position.X + (cell.Size / 2),
+                                        cell.Position.Y +
+                                        (cell.Size / 2)),
+                                    fertilizers, gameEntities);
+                                break;
+                            default:
+                                throw new IndexOutOfRangeException();
                         }
                     }
                 }
             }
-        }
 
-        public void CreateObjectOnCell(MouseState mouse, List<Fertilizer> fertilizers, List<Rock> rocks, List<GameEntity> gameEntities)
-        {
-            foreach (var cell in _cells)
-            {
-                if (mouse.LeftButton == ButtonState.Pressed)
-                {
-                    if (cell.Hovered)
-                    {
-                        if (cell.IsEmpty)
-                        {
-                            switch (Utils.CurrentObjectSelected)
-                            {
-                                case UsableObject.Rock:
-
-                                    Utils.CreateRock(cell,
-                                        rocks, gameEntities);
-                                    break;
-                                case UsableObject.LittleFertilizer:
-                                    Utils.CreateLittleFertilizer(new Vector2(cell.Position.X + (cell.Size / 2),
-                                            cell.Position.Y +
-                                            (cell.Size / 2)),
-                                        fertilizers, gameEntities);
-                                    break;
-                                case UsableObject.MediumFertilizer:
-                                    Utils.CreateMediumFertilizer(new Vector2(cell.Position.X + (cell.Size / 2),
-                                            cell.Position.Y +
-                                            (cell.Size / 2)),
-                                        fertilizers, gameEntities);
-                                    break;
-                                case UsableObject.LargeFertilizer:
-                                    Utils.CreateLargeFertilizer(new Vector2(cell.Position.X + (cell.Size / 2),
-                                            cell.Position.Y +
-                                            (cell.Size / 2)),
-                                        fertilizers, gameEntities);
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
-                        }
-                    }
-                }
-            }
         }
         /// <summary>
         /// Create a fertilizer on the cell under the mouse
@@ -171,7 +156,7 @@ namespace CumulusGame.Graphics
         /// <param name="gameEntities">The game entities list where we add the fertilizer</param>
         public void CreateFertilizerOnCell(MouseState mouse, List<Fertilizer> fertilizers, List<GameEntity> gameEntities)
         {
-            foreach (var cell in _cells)
+            foreach (Cell cell in _cells)
             {
                 if (mouse.LeftButton == ButtonState.Pressed)
                 {
@@ -214,7 +199,7 @@ namespace CumulusGame.Graphics
 
         public void Update(GameTime gameTime)
         {
-            foreach (var cell in _cells)
+            foreach (Cell cell in _cells)
             {
                 cell.Update(gameTime);
             }
@@ -222,11 +207,13 @@ namespace CumulusGame.Graphics
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var cell in _cells)
+            foreach (Cell cell in _cells)
             {
                 cell.Draw(spriteBatch);
             }
-            //spriteBatch.Draw(_hitboxTex, _hitbox, Color.White);
+#if DEBUG
+            spriteBatch.Draw(_hitboxTex, _hitbox, Color.White);
+#endif
         }
 
         #endregion

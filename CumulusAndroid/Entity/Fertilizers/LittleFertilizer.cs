@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CumulusGame.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace CumulusGame.Entity.Fertilizers
 {

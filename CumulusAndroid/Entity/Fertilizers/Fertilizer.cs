@@ -9,7 +9,7 @@ namespace CumulusGame.Entity.Fertilizers
         #region Fields
 
         // Constants
-        protected const float FertilizerScale = Utils.SCALE * 0.25f;
+        protected const float FERTILIZER_SCALE = 0.25f;
 
         // Processing Fields
         protected float _timeToEat, _amountOfAnger;
@@ -27,16 +27,18 @@ namespace CumulusGame.Entity.Fertilizers
         protected Fertilizer(Vector2 position, Texture2D texture)
         {
             this.texture = texture;
-            this.position = new Vector2((position.X - (((float)this.texture.Width / 2) * FertilizerScale)), (position.Y - (((float)this.texture.Height / 2) * FertilizerScale)));
+            this.position = new Vector2((position.X - (((float)this.texture.Width / 2) * FERTILIZER_SCALE)),
+                (position.Y - (((float)this.texture.Height / 2) * FERTILIZER_SCALE)));
 
             // Fertilizer centered on position
             drawRectangle = new Rectangle((int)this.position.X, (int)this.position.Y,
-                                            (int)(this.texture.Width * FertilizerScale), (int)(this.texture.Height * FertilizerScale));
+                                            (int)(this.texture.Width * FERTILIZER_SCALE), (int)(this.texture.Height * FERTILIZER_SCALE));
 
-            hitbox = new Rectangle((int)(position.X - (Utils.CELL_SIZE / 2)), (int)(position.Y - (Utils.CELL_SIZE / 2)), (int)Utils.CELL_SIZE, (int)Utils.CELL_SIZE);
+            hitbox = new Rectangle((int)(position.X - (Utils.CELL_SIZE / 2)), (int)(position.Y - (Utils.CELL_SIZE / 2)),
+                (int)Utils.CELL_SIZE, (int)Utils.CELL_SIZE);
             hitboxTex = Utils.CreateContouringRectangleTexture(hitbox.Width, hitbox.Height, Color.Red);
 
-            cellOn = Utils._gameGrid.GetCellByCoord(position);
+            cellOn = Utils.GameGrid.GetCellByCoord(position);
             cellOn.IsEmpty = false;
         }
 
@@ -70,13 +72,14 @@ namespace CumulusGame.Entity.Fertilizers
         /// <returns>True if it's in, false else</returns>
         public bool CheckIfFertilizerWithinTheGameBoard()
         {
-            return (hitbox.Left >= 0 && hitbox.Right <= Utils.Window_Width
-                    && hitbox.Top >= Utils.GameBoardOffset && hitbox.Bottom <= Utils.Window_Height - Utils.GameBoardOffset);
+            return (hitbox.Left >= 0 && hitbox.Right <= Utils.SCREEN_WIDTH
+                    && hitbox.Top >= Utils.GAMEBOARD_OFFSET && hitbox.Bottom <= Utils.SCREEN_HEIGHT - Utils.GAMEBOARD_OFFSET);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, FertilizerScale, SpriteEffects.None, Utils.ENTITY_DEPTH);
+            spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero,
+                FERTILIZER_SCALE, SpriteEffects.None, Utils.ENTITY_DEPTH);
             //spriteBatch.Draw(hitboxTex, hitbox, Color.White);
         }
 

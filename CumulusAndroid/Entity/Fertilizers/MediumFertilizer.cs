@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CumulusGame.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace CumulusGame.Entity.Fertilizers
 {
@@ -9,12 +10,12 @@ namespace CumulusGame.Entity.Fertilizers
         // Differents cooldown fields 
         private static float _timeElapsedSinceLastCreated;
 
-        private const float FixedCooldown = 3000;
-        private const float FixedTimeToEat = 2000;
-        private const float FixedAmountAnger = 2.5f;
+        private const float FIXED_COOLDOWN = 3000;
+        private const float FIXED_TIME_TO_EAT = 2000;
+        private const float FIXED_AMOUNT_ANGER = 2.5f;
 
-        public static float BaseCooldown => FixedCooldown;
-        public static float CurrentCooldown { get; private set; } = FixedCooldown;
+        public static float BaseCooldown => FIXED_COOLDOWN;
+        public static float CurrentCooldown { get; private set; } = FIXED_COOLDOWN;
 
         #endregion
 
@@ -27,8 +28,8 @@ namespace CumulusGame.Entity.Fertilizers
         /// <param name="position">The position of the fertilizer</param>
         public MediumFertilizer(Vector2 position) : base(position, Assets.MediumFertilizer)
         {
-            _timeToEat = FixedTimeToEat;
-            _amountOfAnger = FixedAmountAnger;
+            _timeToEat = FIXED_TIME_TO_EAT;
+            _amountOfAnger = FIXED_AMOUNT_ANGER;
             texture = Assets.MediumFertilizer;
         }
 

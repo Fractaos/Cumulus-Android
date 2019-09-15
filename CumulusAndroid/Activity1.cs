@@ -21,6 +21,33 @@ namespace CumulusGame
             var g = new Game1();
             SetContentView((View)g.Services.GetService(typeof(View)));
             g.Run();
+
+            View vw = (View)g.Services.GetService(typeof(View));
+            vw.SystemUiVisibility = (StatusBarVisibility)SystemUiFlags.HideNavigation | (StatusBarVisibility)SystemUiFlags.ImmersiveSticky;
+            vw.SetOnSystemUiVisibilityChangeListener(new MyUiVisibilityChangeListener(vw));
+            SetImmersive();
+        }
+        private void SetImmersive()
+        {
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
+            {
+                Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(SystemUiFlags.LayoutStable | SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutFullscreen | SystemUiFlags.HideNavigation | SystemUiFlags.Fullscreen | SystemUiFlags.ImmersiveSticky);
+            }
+        }
+        private class MyUiVisibilityChangeListener : Java.Lang.Object, View.IOnSystemUiVisibilityChangeListener
+        {
+            readonly View _targetView;
+            public MyUiVisibilityChangeListener(View v)
+            {
+                _targetView = v;
+            }
+            public void OnSystemUiVisibilityChange(StatusBarVisibility v)
+            {
+                if (_targetView.SystemUiVisibility != ((StatusBarVisibility)SystemUiFlags.HideNavigation | (StatusBarVisibility)SystemUiFlags.Immersive))
+                {
+                    _targetView.SystemUiVisibility = (StatusBarVisibility)SystemUiFlags.HideNavigation | (StatusBarVisibility)SystemUiFlags.ImmersiveSticky;
+                }
+            }
         }
     }
 }

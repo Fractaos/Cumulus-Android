@@ -60,7 +60,9 @@ namespace CumulusGame.Utility
 
         public void Draw(SpriteBatch spriteBatch)
         {
+#pragma warning disable CA1305 // Spécifier IFormatProvider
             spriteBatch.DrawString(Assets.Pixel18, _points.ToString(),
+#pragma warning restore CA1305 // Spécifier IFormatProvider
                 new Vector2(_position.X - (Assets.Pixel18.MeasureString(_points.ToString()).X / 2), _position.Y - (Assets.Pixel18.MeasureString(_points.ToString()).Y / 2)),
                 Color.White);
         }
