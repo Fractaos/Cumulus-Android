@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace CumulusGame.Screens
 {
@@ -191,93 +190,34 @@ namespace CumulusGame.Screens
             protected readonly Vector2 Position;
             protected float _percentCircle;
             protected float _percentCirclePerUpdate;
-            private readonly Vector4 _theColor;
+            protected readonly Vector4 TheColor;
 
             protected readonly float Scale;
-            private const float SCALE_DIFFERENCE_COOLDOWN = 0.01f;
+            protected const float SCALE_DIFFERENCE_COOLDOWN = 0.01f;
 
-            private readonly Texture2D _cooldownCircle;
-            private readonly Effect _effect;
+            protected readonly Texture2D CooldownCircle;
+            protected readonly Effect Effect;
 
             protected Button _button;
 
             protected ObjectButton(Vector2 position, Effect effect, float scale)
             {
                 Position = position;
-                _effect = effect;
+                Effect = effect;
                 Scale = scale;
                 _percentCircle = 1f;
 
-                _theColor = new Vector4(0.0f, 0.0f, 1.0f, 0.6f);
+                TheColor = new Vector4(0.0f, 0.0f, 1.0f, 0.6f);
 
-                _cooldownCircle = Assets.CooldownCircle;
+                CooldownCircle = Assets.CooldownCircle;
 
             }
 
             public abstract void Update(GameTime gameTime);
 
             public abstract void Draw(SpriteBatch spriteBatch);
-
-            protected void DrawShader(Type type, SpriteBatch spriteBatch)
-            {
-                if (!CooldownUp(type))
-                {
-                    //TODO : à traiter pour version mobile ~ (SHADERS)
-                    //_effect.CurrentTechnique.Passes[0].Apply();
-                    //_effect.Parameters["percent"].SetValue(_percentCircle);
-                    //_effect.Parameters["R"].SetValue(_theColor.X);
-                    //_effect.Parameters["G"].SetValue(_theColor.Y);
-                    //_effect.Parameters["B"].SetValue(_theColor.Z);
-                    //_effect.Parameters["A"].SetValue(_theColor.W);
-                    spriteBatch.Draw(_cooldownCircle,
-                        new Vector2(
-                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * _cooldownCircle.Width),
-                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * _cooldownCircle.Height)),
-                        null,
-                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
-                }
-            }
-
-            protected void UpdatePercentCircle(Type type, GameTime gameTime)
-            {
-
-                if (!CooldownUp(type))
-                {
-                    if (_percentCircle > 0)
-                    {
-                        _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
-                        if (_percentCircle <= 0)
-                            _percentCircle = 1f;
-                    }
-                    else
-                    {
-                        _percentCircle = 1f;
-                    }
-                }
-            }
         }
-
-        private static bool CooldownUp(Type type)
-        {
-            if (type != null)
-            {
-                MethodInfo methodInfo = type.GetMethod("CooldownUp");
-                if (methodInfo != null)
-                {
-                    if (methodInfo.GetParameters().Length == 0)
-                    {
-                        object result = methodInfo.Invoke(null, null);
-                        if (result is bool cooldownUp)
-                        {
-                            return cooldownUp;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
-
+        //TODO : FIX POSITIONNEMENT ET TAILLE DES CERCLES DE COOLDOWN + VOIR SOLUTION PLUS PROPRE NIVEAU DES SPRITEBATCH
         private class LittleFertilizerButton : ObjectButton
         {
             public LittleFertilizerButton(Vector2 position, float scale) : base(position, Assets.EffectLittle, scale)
@@ -295,15 +235,55 @@ namespace CumulusGame.Screens
             public override void Update(GameTime gameTime)
             {
                 _button.Update(gameTime);
-
-                UpdatePercentCircle(typeof(LittleFertilizer), gameTime);
-
+                UpdatePercentCircle(gameTime);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.AlphaBlend);
                 _button.Draw(spriteBatch);
-                DrawShader(typeof(LittleFertilizer), spriteBatch);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.AlphaBlend);
+                DrawShader(spriteBatch);
+            }
+
+            private void DrawShader(SpriteBatch spriteBatch)
+            {
+                if (!LittleFertilizer.CooldownUp())
+                {
+                    Effect.CurrentTechnique.Passes[0].Apply();
+                    Effect.Parameters["percent"].SetValue(_percentCircle);
+                    Effect.Parameters["R"].SetValue(TheColor.X);
+                    Effect.Parameters["G"].SetValue(TheColor.Y);
+                    Effect.Parameters["B"].SetValue(TheColor.Z);
+                    Effect.Parameters["A"].SetValue(TheColor.W);
+                    spriteBatch.Draw(CooldownCircle,
+                        new Vector2(
+                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Width),
+                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Height)),
+                        null,
+                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
+                }
+            }
+
+            private void UpdatePercentCircle(GameTime gameTime)
+            {
+                if (!LittleFertilizer.CooldownUp())
+                {
+                    if (_percentCircle > 0)
+                    {
+                        _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
+                        if (_percentCircle <= 0)
+                            _percentCircle = 1f;
+                    }
+                    else
+                    {
+                        _percentCircle = 1f;
+                    }
+                }
             }
         }
 
@@ -325,13 +305,55 @@ namespace CumulusGame.Screens
             {
                 _button.Update(gameTime);
 
-                UpdatePercentCircle(typeof(MediumFertilizer), gameTime);
+                UpdatePercentCircle(gameTime);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.AlphaBlend);
                 _button.Draw(spriteBatch);
-                DrawShader(typeof(MediumFertilizer), spriteBatch);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.AlphaBlend);
+                DrawShader(spriteBatch);
+            }
+
+            private void DrawShader(SpriteBatch spriteBatch)
+            {
+                if (!MediumFertilizer.CooldownUp())
+                {
+                    Effect.CurrentTechnique.Passes[0].Apply();
+                    Effect.Parameters["percent"].SetValue(_percentCircle);
+                    Effect.Parameters["R"].SetValue(TheColor.X);
+                    Effect.Parameters["G"].SetValue(TheColor.Y);
+                    Effect.Parameters["B"].SetValue(TheColor.Z);
+                    Effect.Parameters["A"].SetValue(TheColor.W);
+                    spriteBatch.Draw(CooldownCircle,
+                        new Vector2(
+                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Width),
+                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Height)),
+                        null,
+                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
+                }
+            }
+
+            private void UpdatePercentCircle(GameTime gameTime)
+            {
+                if (!MediumFertilizer.CooldownUp())
+                {
+                    if (_percentCircle > 0)
+                    {
+                        _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
+                        if (_percentCircle <= 0)
+                            _percentCircle = 1f;
+                    }
+                    else
+                    {
+                        _percentCircle = 1f;
+                    }
+                }
             }
         }
 
@@ -353,13 +375,55 @@ namespace CumulusGame.Screens
             {
                 _button.Update(gameTime);
 
-                UpdatePercentCircle(typeof(LargeFertilizer), gameTime);
+                UpdatePercentCircle(gameTime);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.AlphaBlend);
                 _button.Draw(spriteBatch);
-                DrawShader(typeof(LargeFertilizer), spriteBatch);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.AlphaBlend);
+                DrawShader(spriteBatch);
+            }
+
+            private void DrawShader(SpriteBatch spriteBatch)
+            {
+                if (!LargeFertilizer.CooldownUp())
+                {
+                    Effect.CurrentTechnique.Passes[0].Apply();
+                    Effect.Parameters["percent"].SetValue(_percentCircle);
+                    Effect.Parameters["R"].SetValue(TheColor.X);
+                    Effect.Parameters["G"].SetValue(TheColor.Y);
+                    Effect.Parameters["B"].SetValue(TheColor.Z);
+                    Effect.Parameters["A"].SetValue(TheColor.W);
+                    spriteBatch.Draw(CooldownCircle,
+                        new Vector2(
+                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Width),
+                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Height)),
+                        null,
+                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
+                }
+            }
+
+            private void UpdatePercentCircle(GameTime gameTime)
+            {
+                if (!LargeFertilizer.CooldownUp())
+                {
+                    if (_percentCircle > 0)
+                    {
+                        _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
+                        if (_percentCircle <= 0)
+                            _percentCircle = 1f;
+                    }
+                    else
+                    {
+                        _percentCircle = 1f;
+                    }
+                }
             }
         }
 
@@ -381,13 +445,55 @@ namespace CumulusGame.Screens
             {
                 _button.Update(gameTime);
 
-                UpdatePercentCircle(typeof(Rock), gameTime);
+                UpdatePercentCircle(gameTime);
             }
 
             public override void Draw(SpriteBatch spriteBatch)
             {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.AlphaBlend);
                 _button.Draw(spriteBatch);
-                DrawShader(typeof(Rock), spriteBatch);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.AlphaBlend);
+                DrawShader(spriteBatch);
+            }
+
+            private void DrawShader(SpriteBatch spriteBatch)
+            {
+                if (!Rock.CooldownUp())
+                {
+                    Effect.CurrentTechnique.Passes[0].Apply();
+                    Effect.Parameters["percent"].SetValue(_percentCircle);
+                    Effect.Parameters["R"].SetValue(TheColor.X);
+                    Effect.Parameters["G"].SetValue(TheColor.Y);
+                    Effect.Parameters["B"].SetValue(TheColor.Z);
+                    Effect.Parameters["A"].SetValue(TheColor.W);
+                    spriteBatch.Draw(CooldownCircle,
+                        new Vector2(
+                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Width),
+                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Height)),
+                        null,
+                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
+                }
+            }
+
+            private void UpdatePercentCircle(GameTime gameTime)
+            {
+                if (!Rock.CooldownUp())
+                {
+                    if (_percentCircle > 0)
+                    {
+                        _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
+                        if (_percentCircle <= 0)
+                            _percentCircle = 1f;
+                    }
+                    else
+                    {
+                        _percentCircle = 1f;
+                    }
+                }
             }
         }
 

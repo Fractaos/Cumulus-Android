@@ -11,7 +11,7 @@ namespace CumulusGame.Graphics
         CumulusNina
     }
 
-    public class Assets
+    public static class Assets
     {
         #region Fields
 
@@ -74,10 +74,10 @@ namespace CumulusGame.Graphics
 
             Isle = Main.Content.Load<Texture2D>("graphics/isle_skin");
 
-            //EffectLittle = Main.Content.Load<Effect>("shaders/effectLittle");
-            //EffectMedium = Main.Content.Load<Effect>("shaders/effectMedium");
-            //EffectLarge = Main.Content.Load<Effect>("shaders/effectLarge");
-            //EffectRock = Main.Content.Load<Effect>("shaders/effectRock");
+            EffectLittle = Main.Content.Load<Effect>("shaders/effectLittle");
+            EffectMedium = Main.Content.Load<Effect>("shaders/effectMedium");
+            EffectLarge = Main.Content.Load<Effect>("shaders/effectLarge");
+            EffectRock = Main.Content.Load<Effect>("shaders/effectRock");
 
             IconeLittleFertilizer = Main.Content.Load<Texture2D>("graphics/icone-fertilizer_little");
             IconeMediumFertilizer = Main.Content.Load<Texture2D>("graphics/icone-fertilizer_medium");

@@ -504,3 +504,28 @@
 /processorParam:TextureFormat=Color
 /build:graphics/skin_button_settings.png
 
+#begin shaders/effectLarge.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:shaders/effectLarge.fx
+
+#begin shaders/effectLittle.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:shaders/effectLittle.fx
+
+#begin shaders/effectMedium.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:shaders/effectMedium.fx
+
+#begin shaders/effectRock.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:shaders/effectRock.fx
+

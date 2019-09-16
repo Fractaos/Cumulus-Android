@@ -12,7 +12,7 @@ sampler s0;
 static const float PI = 3.14159265f;
 float percent;
 float R, G, B, A;
-float4 colorCircle;
+static float4 colorCircle;
 
 struct VertexShaderOutput
 {
