@@ -11,7 +11,6 @@ namespace CumulusGame.Utility
     public static class Utils
     {
         // Constants
-
         public const int SCREEN_WIDTH = 1080;
         public const int SCREEN_HEIGHT = (SCREEN_WIDTH * 16) / 9;
 
@@ -43,13 +42,34 @@ namespace CumulusGame.Utility
 
         public static bool IntroPlayed = false;
 
-        public static Grid GameGrid = new Grid();
+        public static readonly Grid GameGrid = new Grid();
 
-        public static Random Random = new Random();
+        public static readonly Random Random = new Random();
 
+        /// <summary>
+        /// Retourne une position en pixel par rapport à un pourcentage de l'écran passé en paramètre
+        /// </summary>
+        /// <param name="percentX">Pourcentage sur l'axe X</param>
+        /// <param name="percentY">Pourcentage sur l'axe Y</param>
+        /// <returns>Retourne un Vector2 avec la position en pixel</returns>
         public static Vector2 GetPositionOnScreenByPercent(float percentX, float percentY)
         {
             return new Vector2(SCREEN_WIDTH * percentX, SCREEN_HEIGHT * percentY);
+        }
+
+        /// <summary>
+        /// Retourne la valeur transformé sur la range voulue
+        /// </summary>
+        /// <param name="value">Valeur d'entrée</param>
+        /// <param name="actualMax">Maximum de la range actuelle</param>
+        /// <param name="actualMin">Minimum de la range actuelle</param>
+        /// <param name="targetMax">Maximum de la range ciblée</param>
+        /// <param name="targetMin">Minimum de la range ciblée</param>
+        /// <returns>Retourne la valeur transformée</returns>
+        public static float ScalingValue(float value, float actualMax, float actualMin, float targetMax,
+            float targetMin)
+        {
+            return ((value - actualMin) / (actualMax - actualMin)) * (targetMax - targetMin) + targetMin;
         }
 
         /// <summary>

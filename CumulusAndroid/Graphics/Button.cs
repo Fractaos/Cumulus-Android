@@ -10,7 +10,7 @@ namespace CumulusGame.Graphics
         #region Fields
 
         // Graphics fields
-        public string Title { get; set; }
+        private string Title { get; set; }
 
         private readonly Vector2 _position;
 

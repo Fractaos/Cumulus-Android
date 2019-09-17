@@ -154,15 +154,6 @@ namespace CumulusGame.Graphics
         {
             return cell?.GetNeighbours().Contains(this) ?? false;
         }
-
-        /// <summary>
-        /// Set the cell to hovered if the mouse is on it
-        /// </summary>
-        //private void SetHoveredIfIsTouched()
-        //{
-        //    Hovered = Hitbox.Contains(Input.FirstTouchPosition);
-        //}
-
         public override string ToString()
         {
             return Column + ";" + Row;
@@ -170,7 +161,6 @@ namespace CumulusGame.Graphics
 
         public void Update(GameTime gameTime)
         {
-            //SetHoveredIfIsTouched();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -180,6 +170,7 @@ namespace CumulusGame.Graphics
                 spriteBatch.Draw(_texture, Position, null, Color.Red * HOVER_ALPHA, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
                 spriteBatch.Draw(_contouringTexture, Position, null, Color.Red * HOVER_ALPHA, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
             }
+#if DEBUG
             else if (InPath)
             {
                 spriteBatch.Draw(_texture, Position, null, Color.White * _alpha, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
@@ -187,6 +178,7 @@ namespace CumulusGame.Graphics
                 spriteBatch.Draw(_texture, Position, null, Color.Red * HOVER_ALPHA, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
                 spriteBatch.Draw(_contouringTexture, Position, null, Color.Blue, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);
             }
+#endif
             else
             {
                 spriteBatch.Draw(_texture, Position, null, Color.White * _alpha, 0f, Vector2.Zero, 1, SpriteEffects.None, Utils.VISUALHELPER_DEPTH);

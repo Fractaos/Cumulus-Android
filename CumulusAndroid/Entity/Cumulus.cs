@@ -29,10 +29,10 @@ namespace CumulusGame.Entity
         private Vector2 _velocity = Vector2.Zero;
         private Vector2 CenteredPosition => new Vector2(hitbox.Center.X, hitbox.Center.Y);
 
-        public CumulusState State { get; private set; } = CumulusState.Waiting;
+        private CumulusState State { get; set; } = CumulusState.Waiting;
 
         private float _moveSpeed;
-        public float Anger { get; private set; }
+        private float Anger { get; set; }
         private float _timeElapsedBetweenFrame;
         private float _timeCounter;
         private bool _animationEnabled;
@@ -43,9 +43,9 @@ namespace CumulusGame.Entity
 
         private readonly Animation _beginningAnimation;
 
-        public Queue<GameEntity> Targets { get; } = new Queue<GameEntity>();
-        public List<Rock> Obstacles { get; } = new List<Rock>();
-        public Stack<Cell> Path { get; } = new Stack<Cell>();
+        private Queue<GameEntity> Targets { get; } = new Queue<GameEntity>();
+        private List<Rock> Obstacles { get; } = new List<Rock>();
+        private Stack<Cell> Path { get; } = new Stack<Cell>();
 
         // Graphics Fields
         private const int NB_STATE_FRAME = 6;

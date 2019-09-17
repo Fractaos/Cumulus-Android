@@ -190,10 +190,13 @@ namespace CumulusGame.Screens
             protected readonly Vector2 Position;
             protected float _percentCircle;
             protected float _percentCirclePerUpdate;
-            protected readonly Vector4 TheColor;
+            protected Vector4 _theColor;
 
             protected readonly float Scale;
-            protected const float SCALE_DIFFERENCE_COOLDOWN = 0.01f;
+            protected readonly float ShaderScale;
+            private const float SCALE_DIFFERENCE_COOLDOWN = 0.01f;
+
+            protected const float BASE_MAX = 1.0f, BASE_MIN = 0f, TARGET_MAX = 0.8f, TARGET_MIN = 0.4f;
 
             protected readonly Texture2D CooldownCircle;
             protected readonly Effect Effect;
@@ -205,10 +208,13 @@ namespace CumulusGame.Screens
                 Position = position;
                 Effect = effect;
                 Scale = scale;
+                ShaderScale = ((Utils.SCREEN_WIDTH * scale) / Assets.CooldownCircle.Width + SCALE_DIFFERENCE_COOLDOWN);
                 _percentCircle = 1f;
-
-                TheColor = new Vector4(0.0f, 0.0f, 1.0f, 0.6f);
-
+#if DEBUG
+                _theColor = new Vector4(0.0f, 0.0f, 1.0f, 0.6f);
+#else
+                _theColor = new Vector4(0.27f, 0.46f, 0.52f, 0.8f);
+#endif
                 CooldownCircle = Assets.CooldownCircle;
 
             }
@@ -217,7 +223,6 @@ namespace CumulusGame.Screens
 
             public abstract void Draw(SpriteBatch spriteBatch);
         }
-        //TODO : FIX POSITIONNEMENT ET TAILLE DES CERCLES DE COOLDOWN + VOIR SOLUTION PLUS PROPRE NIVEAU DES SPRITEBATCH
         private class LittleFertilizerButton : ObjectButton
         {
             public LittleFertilizerButton(Vector2 position, float scale) : base(position, Assets.EffectLittle, scale)
@@ -256,19 +261,18 @@ namespace CumulusGame.Screens
                 {
                     Effect.CurrentTechnique.Passes[0].Apply();
                     Effect.Parameters["percent"].SetValue(_percentCircle);
-                    Effect.Parameters["R"].SetValue(TheColor.X);
-                    Effect.Parameters["G"].SetValue(TheColor.Y);
-                    Effect.Parameters["B"].SetValue(TheColor.Z);
-                    Effect.Parameters["A"].SetValue(TheColor.W);
+                    Effect.Parameters["R"].SetValue(_theColor.X);
+                    Effect.Parameters["G"].SetValue(_theColor.Y);
+                    Effect.Parameters["B"].SetValue(_theColor.Z);
+                    Effect.Parameters["A"].SetValue(_theColor.W);
                     spriteBatch.Draw(CooldownCircle,
                         new Vector2(
-                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Width),
-                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Height)),
+                            Position.X - ((ShaderScale / 2) * CooldownCircle.Width),
+                            Position.Y - ((ShaderScale / 2) * CooldownCircle.Height)),
                         null,
-                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
+                        Color.White, 0f, Vector2.Zero, ShaderScale, SpriteEffects.None, 1);
                 }
             }
-
             private void UpdatePercentCircle(GameTime gameTime)
             {
                 if (!LittleFertilizer.CooldownUp())
@@ -278,6 +282,8 @@ namespace CumulusGame.Screens
                         _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
                         if (_percentCircle <= 0)
                             _percentCircle = 1f;
+
+                        _theColor.W = Utils.ScalingValue(_percentCircle, BASE_MAX, BASE_MIN, TARGET_MAX, TARGET_MIN);
                     }
                     else
                     {
@@ -326,16 +332,16 @@ namespace CumulusGame.Screens
                 {
                     Effect.CurrentTechnique.Passes[0].Apply();
                     Effect.Parameters["percent"].SetValue(_percentCircle);
-                    Effect.Parameters["R"].SetValue(TheColor.X);
-                    Effect.Parameters["G"].SetValue(TheColor.Y);
-                    Effect.Parameters["B"].SetValue(TheColor.Z);
-                    Effect.Parameters["A"].SetValue(TheColor.W);
+                    Effect.Parameters["R"].SetValue(_theColor.X);
+                    Effect.Parameters["G"].SetValue(_theColor.Y);
+                    Effect.Parameters["B"].SetValue(_theColor.Z);
+                    Effect.Parameters["A"].SetValue(_theColor.W);
                     spriteBatch.Draw(CooldownCircle,
                         new Vector2(
-                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Width),
-                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Height)),
+                            Position.X - ((ShaderScale / 2) * CooldownCircle.Width),
+                            Position.Y - ((ShaderScale / 2) * CooldownCircle.Height)),
                         null,
-                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
+                        Color.White, 0f, Vector2.Zero, ShaderScale, SpriteEffects.None, 1);
                 }
             }
 
@@ -348,6 +354,8 @@ namespace CumulusGame.Screens
                         _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
                         if (_percentCircle <= 0)
                             _percentCircle = 1f;
+
+                        _theColor.W = Utils.ScalingValue(_percentCircle, BASE_MAX, BASE_MIN, TARGET_MAX, TARGET_MIN);
                     }
                     else
                     {
@@ -396,16 +404,16 @@ namespace CumulusGame.Screens
                 {
                     Effect.CurrentTechnique.Passes[0].Apply();
                     Effect.Parameters["percent"].SetValue(_percentCircle);
-                    Effect.Parameters["R"].SetValue(TheColor.X);
-                    Effect.Parameters["G"].SetValue(TheColor.Y);
-                    Effect.Parameters["B"].SetValue(TheColor.Z);
-                    Effect.Parameters["A"].SetValue(TheColor.W);
+                    Effect.Parameters["R"].SetValue(_theColor.X);
+                    Effect.Parameters["G"].SetValue(_theColor.Y);
+                    Effect.Parameters["B"].SetValue(_theColor.Z);
+                    Effect.Parameters["A"].SetValue(_theColor.W);
                     spriteBatch.Draw(CooldownCircle,
                         new Vector2(
-                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Width),
-                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Height)),
+                            Position.X - ((ShaderScale / 2) * CooldownCircle.Width),
+                            Position.Y - ((ShaderScale / 2) * CooldownCircle.Height)),
                         null,
-                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
+                        Color.White, 0f, Vector2.Zero, ShaderScale, SpriteEffects.None, 1);
                 }
             }
 
@@ -418,6 +426,8 @@ namespace CumulusGame.Screens
                         _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
                         if (_percentCircle <= 0)
                             _percentCircle = 1f;
+
+                        _theColor.W = Utils.ScalingValue(_percentCircle, BASE_MAX, BASE_MIN, TARGET_MAX, TARGET_MIN);
                     }
                     else
                     {
@@ -466,16 +476,16 @@ namespace CumulusGame.Screens
                 {
                     Effect.CurrentTechnique.Passes[0].Apply();
                     Effect.Parameters["percent"].SetValue(_percentCircle);
-                    Effect.Parameters["R"].SetValue(TheColor.X);
-                    Effect.Parameters["G"].SetValue(TheColor.Y);
-                    Effect.Parameters["B"].SetValue(TheColor.Z);
-                    Effect.Parameters["A"].SetValue(TheColor.W);
+                    Effect.Parameters["R"].SetValue(_theColor.X);
+                    Effect.Parameters["G"].SetValue(_theColor.Y);
+                    Effect.Parameters["B"].SetValue(_theColor.Z);
+                    Effect.Parameters["A"].SetValue(_theColor.W);
                     spriteBatch.Draw(CooldownCircle,
                         new Vector2(
-                            Position.X - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Width),
-                            Position.Y - ((SCALE_DIFFERENCE_COOLDOWN / 2) * CooldownCircle.Height)),
+                            Position.X - ((ShaderScale / 2) * CooldownCircle.Width),
+                            Position.Y - ((ShaderScale / 2) * CooldownCircle.Height)),
                         null,
-                        Color.White, 0f, Vector2.Zero, Scale + SCALE_DIFFERENCE_COOLDOWN, SpriteEffects.None, 1);
+                        Color.White, 0f, Vector2.Zero, ShaderScale, SpriteEffects.None, 1);
                 }
             }
 
@@ -488,6 +498,8 @@ namespace CumulusGame.Screens
                         _percentCircle -= _percentCirclePerUpdate * gameTime.ElapsedGameTime.Milliseconds;
                         if (_percentCircle <= 0)
                             _percentCircle = 1f;
+
+                        _theColor.W = Utils.ScalingValue(_percentCircle, BASE_MAX, BASE_MIN, TARGET_MAX, TARGET_MIN);
                     }
                     else
                     {
