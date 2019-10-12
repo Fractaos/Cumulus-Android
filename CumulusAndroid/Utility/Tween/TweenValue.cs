@@ -4,49 +4,48 @@ namespace CumulusGame.Utility.Tween
 {
     public class TweenValue
     {
-        public float Value;
-        public float Time;
-        public float Begin;
-        public float Change;
-        public float Duration;
-        public EaseFunction Function;
+        private float _value;
+        private float _time;
+        private float _begin;
+        private float _change;
+        private float _duration;
+        private EaseFunction _function;
 
-        public Action<float> Functor;
+        private Action<float> _functor;
 
-        public bool Used, ReadyToRemove;
+        private bool _used;
 
         public TweenValue()
         {
-            Time = 0;
-            Duration = 0;
-            Function = EaseFunction.Linear;
-            Used = ReadyToRemove = false;
+            _time = 0;
+            _duration = 0;
+            _function = EaseFunction.Linear;
+            _used = false;
         }
 
         public void Update(float time)
         {
-            if (Time < Duration)
+            if (_time < _duration)
             {
-                Time += time;
-                Value = Ease.Easing(Time, Begin, Change, Duration, Function);
-                Functor(Value);
+                _time += time;
+                _value = Ease.Easing(_time, _begin, _change, _duration, _function);
+                _functor(_value);
             }
 
-            if (Used && Time >= Duration)
+            if (_used && _time >= _duration)
             {
-                ReadyToRemove = true;
             }
         }
 
-        public void Move(float value, float _change, float _duration, EaseFunction _function, Action<float> _functor)
+        public void Move(float value, float change, float duration, EaseFunction function, Action<float> functor)
         {
-            Functor = _functor;
-            Begin = value;
-            Change = _change - Begin;
-            Duration = _duration;
-            Function = _function;
-            Time = 0;
-            Used = true;
+            _functor = functor;
+            _begin = value;
+            _change = change - _begin;
+            _duration = duration;
+            _function = function;
+            _time = 0;
+            _used = true;
         }
     }
 }

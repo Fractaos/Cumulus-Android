@@ -214,7 +214,6 @@
     <Compile Include="Screens\TestScreen.cs" />
     <Compile Include="Utility\Input.cs" />
     <Compile Include="Utility\Score.cs" />
-    <Compile Include="Utility\Sprite.cs" />
     <Compile Include="Utility\Tween\Ease.cs" />
     <Compile Include="Utility\Tween\EaseFunction.cs" />
     <Compile Include="Utility\Tween\TweenPosition.cs" />
