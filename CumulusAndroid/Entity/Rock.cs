@@ -25,7 +25,7 @@ namespace CumulusGame.Entity
         private Texture2D _blackShader;
 
         // Processing fields
-        public bool Broken { get; set; }
+        public bool Broken { get; private set; }
         public bool Animate { get; private set; }
         public float TimeToBreak { get; }
         public static float BaseCooldown => FIXED_COOLDOWN;
@@ -41,20 +41,20 @@ namespace CumulusGame.Entity
         /// <param name="position">The cell we want the rock to be on</param>
         public Rock(Cell position)
         {
-            cellOn = position;
-            cellOn.IsEmpty = false;
+            _cellOn = position;
+            _cellOn.IsEmpty = false;
             TimeToBreak = BREAK_TIME;
-            this.position = new Vector2(cellOn.Position.X - (((((float)Assets.Rock.Width / 6) * ROCK_SCALE) - Utils.CELL_SIZE) / 2),
-                cellOn.Position.Y - (((float)Assets.Rock.Height / 2) * ROCK_SCALE));
-            _spriteAnimated = new Animation(this.position,
+            this._position = new Vector2(_cellOn.Position.X - (((((float)Assets.Rock.Width / 6) * ROCK_SCALE) - Utils.CELL_SIZE) / 2),
+                _cellOn.Position.Y - (((float)Assets.Rock.Height / 2) * ROCK_SCALE));
+            _spriteAnimated = new Animation(this._position,
                 350,
                 6,
                 Assets.Rock,
                 TypeOfSheet.Horizontal,
                 false,
                 ROCK_SCALE);
-            _lightning = new Animation(new Vector2(this.position.X - 30,
-                this.position.Y - (cellOn.Hitbox.Height - 30)),
+            _lightning = new Animation(new Vector2(this._position.X - 30,
+                this._position.Y - (_cellOn.Hitbox.Height - 30)),
                 350,
                 7,
                 Assets.Lightning,
@@ -109,7 +109,7 @@ namespace CumulusGame.Entity
         public void Destroy()
         {
             Broken = true;
-            cellOn.IsEmpty = true;
+            _cellOn.IsEmpty = true;
             Animate = true;
         }
 

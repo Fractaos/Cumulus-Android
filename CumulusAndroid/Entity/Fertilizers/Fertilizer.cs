@@ -9,11 +9,11 @@ namespace CumulusGame.Entity.Fertilizers
         #region Fields
 
         // Constants
-        protected const float FERTILIZER_SCALE = 0.25f;
+        private const float FERTILIZER_SCALE = 0.25f;
 
         // Processing Fields
         protected float _timeToEat, _amountOfAnger;
-        protected bool _eated;
+        private bool _eated;
 
         #endregion
 
@@ -26,20 +26,20 @@ namespace CumulusGame.Entity.Fertilizers
         /// <param name="texture">The texture of the fertilizer</param>
         protected Fertilizer(Vector2 position, Texture2D texture)
         {
-            this.texture = texture;
-            this.position = new Vector2((position.X - (((float)this.texture.Width / 2) * FERTILIZER_SCALE)),
-                (position.Y - (((float)this.texture.Height / 2) * FERTILIZER_SCALE)));
+            this._texture = texture;
+            this._position = new Vector2((position.X - (((float)this._texture.Width / 2) * FERTILIZER_SCALE)),
+                (position.Y - (((float)this._texture.Height / 2) * FERTILIZER_SCALE)));
 
             // Fertilizer centered on position
-            drawRectangle = new Rectangle((int)this.position.X, (int)this.position.Y,
-                                            (int)(this.texture.Width * FERTILIZER_SCALE), (int)(this.texture.Height * FERTILIZER_SCALE));
+            _drawRectangle = new Rectangle((int)this._position.X, (int)this._position.Y,
+                                            (int)(this._texture.Width * FERTILIZER_SCALE), (int)(this._texture.Height * FERTILIZER_SCALE));
 
-            hitbox = new Rectangle((int)(position.X - (Utils.CELL_SIZE / 2)), (int)(position.Y - (Utils.CELL_SIZE / 2)),
+            _hitbox = new Rectangle((int)(position.X - (Utils.CELL_SIZE / 2)), (int)(position.Y - (Utils.CELL_SIZE / 2)),
                 (int)Utils.CELL_SIZE, (int)Utils.CELL_SIZE);
-            hitboxTex = Utils.CreateContouringRectangleTexture(hitbox.Width, hitbox.Height, Color.Red);
+            _hitboxTex = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.Red);
 
-            cellOn = Utils.GameGrid.GetCellByCoord(position);
-            cellOn.IsEmpty = false;
+            _cellOn = Utils.GameGrid.GetCellByCoord(position);
+            _cellOn.IsEmpty = false;
         }
 
         #endregion
@@ -63,7 +63,7 @@ namespace CumulusGame.Entity.Fertilizers
         public void Destroy()
         {
             _eated = true;
-            cellOn.IsEmpty = true;
+            _cellOn.IsEmpty = true;
         }
 
         /// <summary>
@@ -72,13 +72,13 @@ namespace CumulusGame.Entity.Fertilizers
         /// <returns>True if it's in, false else</returns>
         public bool CheckIfFertilizerWithinTheGameBoard()
         {
-            return (hitbox.Left >= 0 && hitbox.Right <= Utils.SCREEN_WIDTH
-                    && hitbox.Top >= Utils.GAMEBOARD_OFFSET && hitbox.Bottom <= Utils.SCREEN_HEIGHT - Utils.GAMEBOARD_OFFSET);
+            return (_hitbox.Left >= 0 && _hitbox.Right <= Utils.SCREEN_WIDTH
+                    && _hitbox.Top >= Utils.GAMEBOARD_OFFSET && _hitbox.Bottom <= Utils.SCREEN_HEIGHT - Utils.GAMEBOARD_OFFSET);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero,
+            spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero,
                 FERTILIZER_SCALE, SpriteEffects.None, Utils.ENTITY_DEPTH);
             //spriteBatch.Draw(hitboxTex, hitbox, Color.White);
         }

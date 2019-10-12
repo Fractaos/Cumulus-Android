@@ -10,12 +10,12 @@ namespace CumulusGame.Entity.Fertilizers
         // Differents cooldown fields 
         private static float _timeElapsedSinceLastCreated;
 
-        private const float FixedCooldown = 5000;
-        private const float FixedTimeToEat = 1000;
-        private const float FixedAmountAnger = 1;
+        private const float FIXED_COOLDOWN = 5000;
+        private const float FIXED_TIME_TO_EAT = 1000;
+        private const float FIXED_AMOUNT_ANGER = 1;
 
-        public static float BaseCooldown => FixedCooldown;
-        public static float CurrentCooldown { get; private set; } = FixedCooldown;
+        public static float BaseCooldown => FIXED_COOLDOWN;
+        public static float CurrentCooldown { get; private set; } = FIXED_COOLDOWN;
 
         public static float ActualCooldown
         {
@@ -33,9 +33,9 @@ namespace CumulusGame.Entity.Fertilizers
         /// <param name="position">The position of the fertilizer</param>
         public LittleFertilizer(Vector2 position) : base(position, Assets.LittleFertilizer)
         {
-            _timeToEat = FixedTimeToEat;
-            _amountOfAnger = FixedAmountAnger;
-            texture = Assets.LittleFertilizer;
+            _timeToEat = FIXED_TIME_TO_EAT;
+            _amountOfAnger = FIXED_AMOUNT_ANGER;
+            _texture = Assets.LittleFertilizer;
         }
 
         #endregion

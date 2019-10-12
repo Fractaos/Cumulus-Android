@@ -30,7 +30,7 @@ namespace CumulusGame.Entity.Fertilizers
         {
             _timeToEat = FIXED_TIME_TO_EAT;
             _amountOfAnger = FIXED_AMOUNT_ANGER;
-            texture = Assets.MediumFertilizer;
+            _texture = Assets.MediumFertilizer;
         }
 
         #endregion

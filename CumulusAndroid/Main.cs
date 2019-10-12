@@ -54,7 +54,7 @@ namespace CumulusGame
                 false, letterbox);
 
 
-            SetGameState(GameState.Menu);
+            SetGameState(GameState.Test);
         }
 
         public void Update(GameTime time)

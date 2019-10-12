@@ -10,33 +10,27 @@ namespace CumulusGame.Entity
         #region Fields
 
         // Graphics Fields
-        protected Texture2D texture, hitboxTex;
-        protected Rectangle drawRectangle;
-        protected Vector2 position;
+        protected Texture2D _texture, _hitboxTex;
+        protected Rectangle _drawRectangle;
+        protected Vector2 _position;
 
         // Processing Fields
-        protected Rectangle hitbox;
-        protected Cell cellOn;
+        protected Rectangle _hitbox;
+        protected Cell _cellOn;
 
         #endregion
 
         #region Properties
 
-        public Vector2 Position
+        protected Vector2 Position
         {
-            get { return position; }
-            set { position = value; }
+            get => _position;
+            set => _position = value;
         }
 
-        public Rectangle Hitbox
-        {
-            get { return hitbox; }
-        }
+        public Rectangle Hitbox => _hitbox;
 
-        public Cell Cell
-        {
-            get { return cellOn; }
-        }
+        public Cell Cell => _cellOn;
 
         #endregion
 
@@ -48,14 +42,7 @@ namespace CumulusGame.Entity
 
         public int CompareTo(GameEntity other)
         {
-            if (other == null)
-            {
-                return 1;
-            }
-            else
-            {
-                return cellOn.Row.CompareTo(other.cellOn.Row);
-            }
+            return other == null ? 1 : _cellOn.Row.CompareTo(other._cellOn.Row);
         }
 
         #endregion

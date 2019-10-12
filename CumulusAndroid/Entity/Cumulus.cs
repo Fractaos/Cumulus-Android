@@ -27,7 +27,7 @@ namespace CumulusGame.Entity
 
         // Processing fields
         private Vector2 _velocity = Vector2.Zero;
-        private Vector2 CenteredPosition => new Vector2(hitbox.Center.X, hitbox.Center.Y);
+        private Vector2 CenteredPosition => new Vector2(_hitbox.Center.X, _hitbox.Center.Y);
 
         private CumulusState State { get; set; } = CumulusState.Waiting;
 
@@ -69,40 +69,40 @@ namespace CumulusGame.Entity
             switch (Utils.CurrentSkin)
             {
                 case SkinType.CumulusBase:
-                    texture = Assets.Cumulus;
+                    _texture = Assets.Cumulus;
                     break;
                 case SkinType.CumulusChat:
-                    texture = Assets.CumulusChat;
+                    _texture = Assets.CumulusChat;
                     break;
                 case SkinType.CumulusEgypt:
-                    texture = Assets.CumulusEgypt;
+                    _texture = Assets.CumulusEgypt;
                     break;
                 case SkinType.CumulusNina:
-                    texture = Assets.CumulusNina;
+                    _texture = Assets.CumulusNina;
                     break;
                 case SkinType.CumulusStValentin:
-                    texture = Assets.CumulusStValentin;
+                    _texture = Assets.CumulusStValentin;
                     break;
                 default:
-                    texture = Assets.Cumulus;
+                    _texture = Assets.Cumulus;
                     break;
             }
 
             _selectedStateFrame = 0;
             _selectedDirFrame = 3;
 
-            cellOn = position;
-            cellOn.IsEmpty = false;
+            _cellOn = position;
+            _cellOn.IsEmpty = false;
 
             // Cumulus centered on position
-            this.position = new Vector2((cellOn.Position.X - (((float)FRAME_WIDTH / 2) * CUMULUS_SCALE)) + (Utils.CELL_SIZE / 2), (cellOn.Position.Y - (((float)FRAME_HEIGHT / 2) * CUMULUS_SCALE)));
+            this._position = new Vector2((_cellOn.Position.X - (((float)FRAME_WIDTH / 2) * CUMULUS_SCALE)) + (Utils.CELL_SIZE / 2), (_cellOn.Position.Y - (((float)FRAME_HEIGHT / 2) * CUMULUS_SCALE)));
 
-            drawRectangle = new Rectangle((int)this.position.X, (int)this.position.Y,
-                                            (int)(texture.Width * CUMULUS_SCALE) / NB_STATE_FRAME, (int)(texture.Height * CUMULUS_SCALE) / NB_DIR_FRAME);
+            _drawRectangle = new Rectangle((int)this._position.X, (int)this._position.Y,
+                                            (int)(_texture.Width * CUMULUS_SCALE) / NB_STATE_FRAME, (int)(_texture.Height * CUMULUS_SCALE) / NB_DIR_FRAME);
 
             // Hitbox half height of the Cumulus
-            hitbox = new Rectangle((int)this.position.X, (int)(this.position.Y + Utils.CELL_SIZE), (int)Utils.CELL_SIZE, (int)Utils.CELL_SIZE);
-            hitboxTex = Utils.CreateContouringRectangleTexture(hitbox.Width, hitbox.Height, Color.White);
+            _hitbox = new Rectangle((int)this._position.X, (int)(this._position.Y + Utils.CELL_SIZE), (int)Utils.CELL_SIZE, (int)Utils.CELL_SIZE);
+            _hitboxTex = Utils.CreateContouringRectangleTexture(_hitbox.Width, _hitbox.Height, Color.White);
 
             _beginningAnimation = new Animation(Position, Utils.TIME_BEFORE_GAME_START, 12, Assets.AnimationCumulusBeginning, TypeOfSheet.Horizontal, false, CUMULUS_SCALE);
 
@@ -129,13 +129,13 @@ namespace CumulusGame.Entity
 
                     var pathPossible = false;
 
-                    if (cellOn.CheckIfCellIsNear(_currentTarget.Cell))
+                    if (_cellOn.CheckIfCellIsNear(_currentTarget.Cell))
                     {
                         State = _currentTarget is Fertilizer ? CumulusState.EatingFertilizer : CumulusState.DestroyingRock;
                         break;
                     }
                     if (nbNotEmptyCloseCell != nbCloseCell)
-                        pathPossible = PathFinding(cellOn, _currentTarget.Cell);
+                        pathPossible = PathFinding(_cellOn, _currentTarget.Cell);
                     else
                     {
                         foreach (Cell cell in _currentTarget.Cell.GetNeighbours())
@@ -189,7 +189,7 @@ namespace CumulusGame.Entity
                         FollowingThePath(gameTime.ElapsedGameTime.Milliseconds);
                     else
                     {
-                        if (_currentTarget.Cell.CheckIfCellIsNear(cellOn))
+                        if (_currentTarget.Cell.CheckIfCellIsNear(_cellOn))
                             State = _currentTarget is Fertilizer
                                 ? CumulusState.EatingFertilizer
                                 : CumulusState.DestroyingRock;
@@ -361,11 +361,11 @@ namespace CumulusGame.Entity
 
             if (targetCell.CheckIfCellIsNear(closedList[closedList.Count - 1]))
             {
-                closedList.Remove(cellOn);
+                closedList.Remove(_cellOn);
                 Path.Push(closedList[closedList.Count - 1]);
                 Cell currentPathCell = closedList[closedList.Count - 1];
                 closedList.Remove(currentPathCell);
-                while (!currentPathCell.CheckIfCellIsNear(cellOn))
+                while (!currentPathCell.CheckIfCellIsNear(_cellOn))
                 {
                     for (var i = closedList.Count - 1; i >= 0; i--)
                     {
@@ -392,16 +392,16 @@ namespace CumulusGame.Entity
         /// <param name="cell"></param>
         private void SetTheCellAsCurrent(Cell cell)
         {
-            if (cellOn != null && cell != null)
+            if (_cellOn != null && cell != null)
             {
-                cellOn.IsEmpty = true;
-                cellOn = cell;
-                cellOn.IsEmpty = false;
+                _cellOn.IsEmpty = true;
+                _cellOn = cell;
+                _cellOn.IsEmpty = false;
             }
             else if (cell != null)
             {
-                cellOn = cell;
-                cellOn.IsEmpty = false;
+                _cellOn = cell;
+                _cellOn.IsEmpty = false;
             }
         }
 
@@ -411,7 +411,7 @@ namespace CumulusGame.Entity
         /// <param name="millis">GameTime elapsed in milliseconds</param>
         private void FollowingThePath(float millis)
         {
-            if (_currentTargetedCell.Equals(cellOn))
+            if (_currentTargetedCell.Equals(_cellOn))
             {
                 Path.Pop();
                 _currentTargetedCell.InPath = false;
@@ -430,7 +430,7 @@ namespace CumulusGame.Entity
         /// <param name="millis">GameTime elapsed in milliseconds</param>
         private void GoToNearCell(float millis)
         {
-            if (cellOn.CheckIfCellIsNear(_currentTargetedCell))
+            if (_cellOn.CheckIfCellIsNear(_currentTargetedCell))
             {
                 SetVelocityBasedOnTarget(_currentTargetedCell);
                 Vector2 speed = new Vector2(_velocity.X, _velocity.Y) * _moveSpeed * millis;
@@ -439,7 +439,7 @@ namespace CumulusGame.Entity
                 {
                     _selectedDirFrame = speed.X < 0 ? 0 : 1;
 
-                    position.X += speed.X;
+                    _position.X += speed.X;
 
                     UpdateHitboxPosition();
 
@@ -447,14 +447,14 @@ namespace CumulusGame.Entity
 
                     if (Math.Abs(difPosX) <= Math.Abs(speed.X))
                     {
-                        position.X += difPosX;
+                        _position.X += difPosX;
                     }
                 }
                 if (!CenteredPosition.Y.Equals(_currentTargetedCell.CenteredPosition.Y))
                 {
                     _selectedDirFrame = speed.Y < 0 ? 2 : 3;
 
-                    position.Y += speed.Y;
+                    _position.Y += speed.Y;
 
                     UpdateHitboxPosition();
 
@@ -462,7 +462,7 @@ namespace CumulusGame.Entity
 
                     if (Math.Abs(difPosY) <= Math.Abs(speed.Y))
                     {
-                        position.Y += difPosY;
+                        _position.Y += difPosY;
                     }
                 }
                 if (CenteredPosition.Y.Equals(_currentTargetedCell.CenteredPosition.Y) && CenteredPosition.X.Equals(_currentTargetedCell.CenteredPosition.X))
@@ -486,27 +486,27 @@ namespace CumulusGame.Entity
 
         private void UpdateHitboxPosition()
         {
-            hitbox.X = (int)position.X;
-            hitbox.Y = (int)(position.Y + Utils.CELL_SIZE);
+            _hitbox.X = (int)_position.X;
+            _hitbox.Y = (int)(_position.Y + Utils.CELL_SIZE);
         }
 
         private void ClampInGameGrid()
         {
-            if (hitbox.Left < Utils.GameGrid.Left)
+            if (_hitbox.Left < Utils.GameGrid.Left)
             {
-                position.X = Utils.GameGrid.Left;
+                _position.X = Utils.GameGrid.Left;
             }
-            if (hitbox.Right > Utils.GameGrid.Right)
+            if (_hitbox.Right > Utils.GameGrid.Right)
             {
-                position.X = Utils.GameGrid.Right - Utils.CELL_SIZE;
+                _position.X = Utils.GameGrid.Right - Utils.CELL_SIZE;
             }
-            if (hitbox.Top < Utils.GameGrid.Top)
+            if (_hitbox.Top < Utils.GameGrid.Top)
             {
-                position.Y = Utils.GameGrid.Top;
+                _position.Y = Utils.GameGrid.Top;
             }
-            if (hitbox.Bottom > Utils.GameGrid.Bottom)
+            if (_hitbox.Bottom > Utils.GameGrid.Bottom)
             {
-                position.Y = Utils.GameGrid.Bottom - Utils.CELL_SIZE;
+                _position.Y = Utils.GameGrid.Bottom - Utils.CELL_SIZE;
             }
 
             UpdateHitboxPosition();
@@ -554,7 +554,7 @@ namespace CumulusGame.Entity
         {
             if (_controlEnabled)
             {
-                spriteBatch.Draw(texture, position,
+                spriteBatch.Draw(_texture, _position,
                     new Rectangle(_selectedStateFrame * FRAME_WIDTH, _selectedDirFrame * FRAME_HEIGHT, FRAME_WIDTH,
                         FRAME_HEIGHT),
                     Color.White, 0f, Vector2.Zero, CUMULUS_SCALE, SpriteEffects.None, Utils.ENTITY_DEPTH);
