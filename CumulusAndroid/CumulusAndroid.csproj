@@ -216,7 +216,6 @@
     <Compile Include="Utility\Score.cs" />
     <Compile Include="Utility\Tween\Ease.cs" />
     <Compile Include="Utility\Tween\EaseFunction.cs" />
-    <Compile Include="Utility\Tween\TweenPosition.cs" />
     <Compile Include="Utility\Tween\TweenValue.cs" />
     <Compile Include="Utility\Utils.cs" />
   </ItemGroup>
