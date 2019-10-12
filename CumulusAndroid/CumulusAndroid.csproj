@@ -204,6 +204,7 @@
     <Compile Include="Graphics\Button.cs" />
     <Compile Include="Graphics\Cell.cs" />
     <Compile Include="Graphics\Grid.cs" />
+    <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\GameState.cs" />
     <Compile Include="Main.cs" />

@@ -6,7 +6,7 @@ namespace CumulusGame.Utility.Tween
     {
         #region private Methods
 
-        private static float Easing(float t, float b, float c, float d, EaseFunction f)
+        public static float Easing(float t, float b, float c, float d, EaseFunction f)
         {
             switch (f)
             {
