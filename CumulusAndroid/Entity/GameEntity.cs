@@ -22,11 +22,7 @@ namespace CumulusGame.Entity
 
         #region Properties
 
-        protected Vector2 Position
-        {
-            get => _position;
-            set => _position = value;
-        }
+        protected Vector2 Position => _position;
 
         public Rectangle Hitbox => _hitbox;
 

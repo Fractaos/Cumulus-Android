@@ -10,7 +10,7 @@ namespace CumulusGame.Screens
 
         public override void Create()
         {
-            _testSprite = new Sprite(Assets.LittleFertilizer, 1f);
+            _testSprite = new Sprite(Assets.LittleFertilizer) { Scale = 2f };
         }
 
         public override void Update(GameTime time)

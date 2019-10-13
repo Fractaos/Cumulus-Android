@@ -78,12 +78,5 @@ namespace CumulusGame.Entity.Fertilizers
         }
 
         #endregion
-
-        #region Public Methods
-
-        public override void Update(GameTime gameTime)
-        { }
-
-        #endregion
     }
 }

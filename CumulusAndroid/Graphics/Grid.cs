@@ -3,7 +3,6 @@ using CumulusGame.Entity.Fertilizers;
 using CumulusGame.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -147,56 +146,6 @@ namespace CumulusGame.Graphics
             }
 
         }
-        /// <summary>
-        /// Create a fertilizer on the cell under the mouse
-        /// The fertilizer created depends on the button of the mouse pressed
-        /// </summary>
-        /// <param name="mouse">The mouse</param>
-        /// <param name="fertilizers">The fertilizers list where we add the fertilizer</param>
-        /// <param name="gameEntities">The game entities list where we add the fertilizer</param>
-        public void CreateFertilizerOnCell(MouseState mouse, List<Fertilizer> fertilizers, List<GameEntity> gameEntities)
-        {
-            foreach (Cell cell in _cells)
-            {
-                if (mouse.LeftButton == ButtonState.Pressed)
-                {
-                    if (cell.Hovered)
-                    {
-                        if (cell.IsEmpty)
-                        {
-                            Utils.CreateLittleFertilizer(new Vector2(cell.Position.X + (cell.Size / 2), cell.Position.Y +
-                                                                                                        (cell.Size / 2)),
-                                fertilizers, gameEntities);
-                        }
-                    }
-                }
-                if (mouse.RightButton == ButtonState.Pressed)
-                {
-                    if (cell.Hovered)
-                    {
-                        if (cell.IsEmpty)
-                        {
-                            Utils.CreateMediumFertilizer(new Vector2(cell.Position.X + (cell.Size / 2), cell.Position.Y +
-                                                                                                        (cell.Size / 2)),
-                                fertilizers, gameEntities);
-                        }
-                    }
-                }
-                if (mouse.MiddleButton == ButtonState.Pressed)
-                {
-                    if (cell.Hovered)
-                    {
-                        if (cell.IsEmpty)
-                        {
-                            Utils.CreateLargeFertilizer(new Vector2(cell.Position.X + (cell.Size / 2), cell.Position.Y +
-                                                                                                       (cell.Size / 2)),
-                                fertilizers, gameEntities);
-                        }
-                    }
-                }
-            }
-        }
-
         public void Update(GameTime gameTime)
         {
             foreach (Cell cell in _cells)
